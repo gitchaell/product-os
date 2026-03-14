@@ -9,14 +9,6 @@ collections_config:
     disable_add: false
     disable_add_folder: false
     disable_file_actions: false
-  source:
-    path: ''
-    name: Biome
-    icon: package_2
-    disable_url: false
-    disable_add: false
-    disable_add_folder: false
-    disable_file_actions: false
 timezone: America/Manaus
 markdown:
   engine: commonmark

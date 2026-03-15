@@ -34,7 +34,7 @@ const formattedDate = new Date(date).toLocaleDateString('en-US', {
     </div>
 
     <div class="grid grid-cols-1 gap-6">
-      <div class="glass rounded-xl p-8 group hover:border-primary/20 transition-all">
+      <a href={`/changelog/${entry.id}`} class="block glass rounded-xl p-8 group hover:border-primary/50 dark:hover:border-primary/50 transition-all hover:bg-slate-50/50 dark:hover:bg-slate-900/50 cursor-pointer text-inherit no-underline">
         <div class="flex gap-2 mb-4">
           <span
             class="bg-primary/10 text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-primary/20"
@@ -56,7 +56,7 @@ const formattedDate = new Date(date).toLocaleDateString('en-US', {
         </div>
 
         {banner_image && (
-          <div class="rounded-lg overflow-hidden border border-border-dark bg-neutral-dark aspect-video flex items-center justify-center relative">
+          <div class="rounded-lg overflow-hidden border border-slate-200 dark:border-border-dark bg-slate-100 dark:bg-neutral-dark aspect-video flex items-center justify-center relative">
             <img
               src={banner_image}
               alt={title}
@@ -66,7 +66,7 @@ const formattedDate = new Date(date).toLocaleDateString('en-US', {
             />
           </div>
         )}
-      </div>
+      </a>
     </div>
   </div>
 </div>

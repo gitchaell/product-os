@@ -18,7 +18,7 @@ const docsEntries = await getCollection('docs');
 
 		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 			{docsEntries.length > 0 ? docsEntries.map(entry => (
-				<div class="p-6 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 hover:border-primary/50 dark:hover:border-primary/50 transition-colors shadow-sm dark:shadow-none">
+				<a href={`/docs/${entry.id}`} class="block p-6 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 hover:border-primary/50 dark:hover:border-primary/50 transition-colors shadow-sm dark:shadow-none cursor-pointer text-inherit no-underline">
 					<div class="mb-4">
 						<span class="px-2 py-1 text-xs rounded bg-primary/10 dark:bg-primary/20 text-primary border border-primary/20 dark:border-primary/30">
 							{entry.data.category}
@@ -33,7 +33,7 @@ const docsEntries = await getCollection('docs');
 							By {entry.data.author}
 						</div>
 					)}
-				</div>
+				</a>
 			)) : (
 				<div class="col-span-full p-12 text-center rounded-xl border border-slate-300 dark:border-slate-800 border-dashed bg-white/30 dark:bg-transparent">
 					<Icon name="tabler:file-description" class="w-12 h-12 text-slate-400 dark:text-slate-600 mx-auto mb-4" />

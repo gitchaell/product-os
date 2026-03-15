@@ -39,12 +39,24 @@ const getItemsByStatus = (status: string) => {
 			</div>
 		</div>
 
+		<!-- Mobile Tab Navigation -->
+		<div class="flex md:hidden overflow-x-auto gap-2 pb-4 mb-4 border-b border-slate-200 dark:border-slate-800" id="mobile-tabs">
+			{columns.map((column, index) => (
+				<button
+					class={`px-4 py-2 whitespace-nowrap rounded-full text-sm font-medium transition-colors border ${index === 0 ? 'bg-primary text-white border-primary' : 'bg-slate-100 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700'}`}
+					data-tab={column.status}
+				>
+					{column.title}
+				</button>
+			))}
+		</div>
+
 		<!-- Kanban Board Layout -->
 		<div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 items-start overflow-x-auto pb-8">
-			{columns.map(column => {
+			{columns.map((column, index) => {
 				const items = getItemsByStatus(column.status);
 				return (
-					<section class="kanban-column flex flex-col rounded-xl min-h-[600px] min-w-[300px] bg-slate-50/50 dark:bg-transparent border border-slate-200 dark:border-[rgba(13,242,242,0.05)]">
+					<section class={`kanban-column flex flex-col rounded-xl min-h-[600px] min-w-[300px] bg-slate-50/50 dark:bg-transparent border border-slate-200 dark:border-[rgba(13,242,242,0.05)] ${index !== 0 ? 'hidden md:flex' : 'flex'}`} data-column={column.status}>
 						<div class="glass-header px-4 py-3 rounded-t-xl flex justify-between items-center border-b border-slate-200 dark:border-[rgba(13,242,242,0.1)] bg-slate-100/50 dark:bg-[rgba(13,242,242,0.03)]">
 							<div class="flex items-center gap-2">
 								<div class={`w-2 h-2 rounded-full ${column.color}`}></div>
@@ -67,6 +79,47 @@ const getItemsByStatus = (status: string) => {
 		</div>
 	</div>
 </Layout>
+
+<script>
+	function setupTabs() {
+		const tabs = document.querySelectorAll('#mobile-tabs button');
+		const columns = document.querySelectorAll('.kanban-column');
+
+		if (!tabs.length || !columns.length) return;
+
+		tabs.forEach((tab) => {
+			tab.addEventListener('click', () => {
+				const status = tab.getAttribute('data-tab');
+
+				// Update tab styles
+				tabs.forEach((t) => {
+					t.classList.remove('bg-primary', 'text-white', 'border-primary');
+					t.classList.add('bg-slate-100', 'dark:bg-slate-800/50', 'text-slate-600', 'dark:text-slate-400', 'border-slate-200', 'dark:border-slate-700');
+				});
+				tab.classList.add('bg-primary', 'text-white', 'border-primary');
+				tab.classList.remove('bg-slate-100', 'dark:bg-slate-800/50', 'text-slate-600', 'dark:text-slate-400', 'border-slate-200', 'dark:border-slate-700');
+
+				// Update columns
+				columns.forEach((col) => {
+					if (col.getAttribute('data-column') === status) {
+						col.classList.remove('hidden');
+						col.classList.add('flex');
+					} else {
+						// Only hide on mobile, show on md and up
+						col.classList.add('hidden', 'md:flex');
+						col.classList.remove('flex');
+					}
+				});
+			});
+		});
+	}
+
+	// Setup on initial load
+	setupTabs();
+
+	// Setup on view transitions
+	document.addEventListener('astro:page-load', setupTabs);
+</script>
 
 <style>
 	.glass-header {

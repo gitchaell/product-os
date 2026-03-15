@@ -1,0 +1,91 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+	const entries = await getCollection('roadmap');
+	return entries.map((entry) => ({
+		params: { id: entry.id },
+		props: { entry },
+	}));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const { title, status, category, assignees = [], progress, priority } = entry.data;
+
+const categoryColors: Record<string, string> = {
+	'UI/UX': 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-700',
+	Analytics: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20',
+	AI: 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20',
+	Security: 'bg-amber-500/10 text-amber-600 dark:text-amber-500 border-amber-500/20',
+	Infrastructure: 'bg-primary/10 text-primary border-primary/20',
+	'Core API': 'bg-primary/10 text-primary border-primary/20',
+	Webhooks: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
+};
+
+const categoryClasses =
+	categoryColors[category] || 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-700';
+
+const statusColors: Record<string, string> = {
+	'Under Consideration': 'bg-slate-500 text-white',
+	'Planned': 'bg-amber-500 text-white',
+	'In Development': 'bg-primary text-white',
+	'Launched': 'bg-green-500 text-white',
+};
+const statusClasses = statusColors[status] || 'bg-slate-500 text-white';
+---
+
+<Layout title={`${title} - Roadmap | Product OS Hub`}>
+	<div class="flex flex-col flex-1 px-6 py-8 max-w-[800px] mx-auto w-full">
+		<a href="/roadmap" class="text-primary hover:text-primary/80 mb-6 inline-flex items-center gap-2">
+			&larr; Back to Roadmap
+		</a>
+
+		<article class="prose dark:prose-invert prose-slate max-w-none">
+			<header class="mb-8">
+				<div class="flex items-center gap-4 mb-4">
+					<span class={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border ${categoryClasses}`}>
+						{category}
+					</span>
+					<span class={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border-none ${statusClasses}`}>
+						{status}
+					</span>
+					{priority && (
+						<span class="text-slate-500 text-sm font-medium">Priority: {priority}</span>
+					)}
+				</div>
+				<h1 class="text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-100 font-display mb-4">{title}</h1>
+
+				{assignees.length > 0 && (
+					<div class="flex items-center gap-3 mt-4">
+						<span class="text-slate-500 text-sm">Assignees:</span>
+						<div class="flex -space-x-2">
+							{assignees.map((user) => (
+								<div class="w-8 h-8 rounded-full bg-primary/20 dark:bg-primary/40 border-2 border-white dark:border-gray-950 flex items-center justify-center text-sm font-bold text-primary dark:text-slate-100" title={user.name}>
+									{user.initials}
+								</div>
+							))}
+						</div>
+					</div>
+				)}
+
+				{progress !== undefined && progress > 0 && (
+					<div class="mt-6 max-w-md">
+						<div class="flex items-center justify-between mb-2">
+							<span class="text-xs text-slate-500 dark:text-slate-400 font-mono">PROGRESS</span>
+							<span class="text-xs text-primary font-mono">{progress}%</span>
+						</div>
+						<div class="w-full bg-slate-200 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+							<div class="bg-primary h-full shadow-[0_0_8px_var(--color-primary)] opacity-80" style={`width: ${progress}%`}></div>
+						</div>
+					</div>
+				)}
+			</header>
+
+			<div class="text-slate-700 dark:text-slate-300 leading-relaxed pt-6 border-t border-slate-200 dark:border-slate-800">
+				<Content />
+			</div>
+		</article>
+	</div>
+</Layout>

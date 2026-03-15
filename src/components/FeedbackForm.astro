@@ -1,0 +1,156 @@
+---
+// FeedbackForm.astro
+import { Icon } from 'astro-icon/components';
+---
+
+<div class="glass-panel rounded-xl overflow-hidden shadow-2xl grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-200 dark:divide-slate-800">
+
+  <!-- Left Side: Submit a Suggestion -->
+  <div class="p-8 lg:p-12">
+    <div class="flex items-center gap-3 mb-8">
+      <Icon name="tabler:bulb" class="w-6 h-6 text-primary" />
+      <h2 class="text-xl font-semibold text-slate-900 dark:text-white font-display">Submit a Suggestion</h2>
+    </div>
+
+    <!-- CloudCannon Form Handling - uses native standard form element -->
+    <!-- The action can be left blank or pointed to a success page, but CloudCannon automatically captures it by name -->
+    <form action="/success" method="POST" class="space-y-6">
+      <!-- Implicitly identify this form to CloudCannon -->
+      <input type="hidden" name="form-name" value="suggestion" />
+
+      <div class="group">
+        <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2" for="suggestion_title">Feature Name</label>
+        <input
+          id="suggestion_title"
+          name="title"
+          type="text"
+          required
+          class="w-full bg-transparent border-b border-slate-200 dark:border-slate-800 py-2 text-slate-900 dark:text-white glow-focus transition-all placeholder:text-slate-600"
+          placeholder="What's your big idea?"
+        />
+      </div>
+
+      <div class="group">
+        <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2" for="suggestion_category">Category</label>
+        <select
+          id="suggestion_category"
+          name="category"
+          required
+          class="w-full bg-transparent border-b border-slate-200 dark:border-slate-800 py-2 text-slate-900 dark:text-white glow-focus appearance-none cursor-pointer"
+        >
+          <option class="bg-background-dark" value="UI/UX Improvements">UI/UX Improvements</option>
+          <option class="bg-background-dark" value="New Functionality">New Functionality</option>
+          <option class="bg-background-dark" value="Performance">Performance</option>
+          <option class="bg-background-dark" value="Integration">Integration</option>
+        </select>
+      </div>
+
+      <div class="group">
+        <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2" for="suggestion_description">Description</label>
+        <textarea
+          id="suggestion_description"
+          name="description"
+          required
+          rows="4"
+          class="w-full bg-transparent border-b border-slate-200 dark:border-slate-800 py-2 text-slate-900 dark:text-white glow-focus transition-all resize-none placeholder:text-slate-600"
+          placeholder="How would this improve your workflow?"
+        ></textarea>
+      </div>
+
+      <button type="submit" class="w-full bg-primary hover:bg-primary/90 text-background-dark font-bold py-3 rounded-lg transition-all flex items-center justify-center gap-2 group">
+        <span>Submit Suggestion</span>
+        <Icon name="tabler:send" class="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+      </button>
+    </form>
+  </div>
+
+  <!-- Right Side: Report an Issue -->
+  <div class="p-8 lg:p-12 bg-slate-50/50 dark:bg-white/[0.02]">
+    <div class="flex items-center gap-3 mb-8">
+      <Icon name="tabler:bug" class="w-6 h-6 text-red-400" />
+      <h2 class="text-xl font-semibold text-slate-900 dark:text-white font-display">Report an Issue</h2>
+    </div>
+
+    <!-- Second CloudCannon Form Handling for Issue reporting -->
+    <!-- enctype="multipart/form-data" is required for file uploads natively -->
+    <form action="/success" method="POST" enctype="multipart/form-data" class="space-y-6">
+      <input type="hidden" name="form-name" value="bug_report" />
+
+      <div class="group">
+        <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2" for="issue_title">Issue Title</label>
+        <input
+          id="issue_title"
+          name="title"
+          type="text"
+          required
+          class="w-full bg-transparent border-b border-slate-200 dark:border-slate-800 py-2 text-slate-900 dark:text-white glow-focus transition-all placeholder:text-slate-600"
+          placeholder="Describe the problem briefly"
+        />
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div class="group">
+          <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2" for="issue_severity">Severity</label>
+          <select
+            id="issue_severity"
+            name="severity"
+            required
+            class="w-full bg-transparent border-b border-slate-200 dark:border-slate-800 py-2 text-slate-900 dark:text-white glow-focus appearance-none cursor-pointer"
+          >
+            <option class="bg-background-dark" value="Low">Low</option>
+            <option class="bg-background-dark" value="Medium">Medium</option>
+            <option class="bg-background-dark" value="High">High</option>
+            <option class="bg-background-dark text-red-400" value="Critical">Critical</option>
+          </select>
+        </div>
+        <div class="group">
+          <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2" for="issue_browser">Browser</label>
+          <select
+            id="issue_browser"
+            name="browser"
+            class="w-full bg-transparent border-b border-slate-200 dark:border-slate-800 py-2 text-slate-900 dark:text-white glow-focus appearance-none cursor-pointer"
+          >
+            <option class="bg-background-dark" value="Chrome">Chrome</option>
+            <option class="bg-background-dark" value="Safari">Safari</option>
+            <option class="bg-background-dark" value="Firefox">Firefox</option>
+            <option class="bg-background-dark" value="Edge">Edge</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="group relative">
+        <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2" for="issue_attachment">Attach Evidence</label>
+        <div class="border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl p-8 flex flex-col items-center justify-center gap-2 hover:border-primary/50 transition-colors cursor-pointer group/upload relative">
+          <Icon name="tabler:cloud-upload" class="w-10 h-10 text-slate-600 group-hover/upload:text-primary transition-colors" />
+          <p class="text-sm text-slate-500">Drop screenshots or <span class="text-primary">browse</span></p>
+          <p class="text-[10px] text-slate-600 uppercase tracking-tighter">PNG, JPG up to 10MB</p>
+          <!-- The actual file input covering the entire drop zone -->
+          <input
+            id="issue_attachment"
+            type="file"
+            name="attachment"
+            accept="image/png, image/jpeg"
+            class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+          />
+        </div>
+      </div>
+
+      <button type="submit" class="w-full border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-900 dark:text-white font-bold py-3 rounded-lg transition-all flex items-center justify-center gap-2">
+        <span>Report Bug</span>
+      </button>
+    </form>
+  </div>
+</div>
+
+<style>
+  .glow-focus:focus {
+    outline: none;
+    border-color: #0df2f2;
+    box-shadow: 0 0 10px rgba(13, 242, 242, 0.2);
+  }
+  .glass-panel {
+    background: rgba(16, 34, 34, 0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+</style>

@@ -1,0 +1,80 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+	entry: CollectionEntry<'changelog'>;
+}
+
+const { entry } = Astro.props;
+const { data } = entry;
+const { title, version, date, type, banner_image } = data;
+
+// Format the date for display
+const formattedDate = new Date(date).toLocaleDateString('en-US', {
+	year: 'numeric',
+	month: 'long',
+	day: 'numeric',
+});
+---
+
+<!--
+  A Component demonstrating CloudCannon Editable Regions.
+  It utilizes data-editable, data-prop, and data-prop-* attributes
+  to make this component visually editable inside the CC editor.
+-->
+<div class="relative pl-12 md:pl-24 group">
+  <!-- Timeline Indicator -->
+  <div class="absolute left-4 md:left-8 top-2 -translate-x-1/2 w-4 h-4 rounded-full bg-slate-800 z-10 border-4 border-background-dark group-hover:bg-primary transition-colors"></div>
+
+  <div class="flex flex-col gap-6">
+    <div class="flex items-center gap-4">
+      <span class="text-slate-500 font-mono text-sm font-bold tracking-widest uppercase" data-editable="text" data-prop="version">{version}</span>
+      <span class="text-slate-500 text-sm">•</span>
+      <span class="text-slate-500 text-sm font-medium" data-editable="text" data-prop="date">{formattedDate}</span>
+    </div>
+
+    <div class="grid grid-cols-1 gap-6">
+      <div class="glass rounded-xl p-8 group hover:border-primary/20 transition-all">
+        <div class="flex gap-2 mb-4">
+          <span
+            class="bg-primary/10 text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-primary/20"
+            data-editable="text"
+            data-prop="type"
+          >
+            {type}
+          </span>
+        </div>
+
+        <!-- Editable Title -->
+        <h3 class="text-xl font-bold mb-4" data-editable="text" data-prop="title" data-type="span">
+          {title}
+        </h3>
+
+        <!-- Editable Markdown Content (Renders the MD body) -->
+        <div class="text-slate-400 text-sm leading-relaxed mb-6" data-editable="text" data-prop="@content" data-type="block">
+          <slot />
+        </div>
+
+        {banner_image && (
+          <div class="rounded-lg overflow-hidden border border-border-dark bg-neutral-dark aspect-video flex items-center justify-center relative">
+            <img
+              src={banner_image}
+              alt={title}
+              class="object-cover w-full h-full"
+              data-editable="image"
+              data-prop-src="banner_image"
+            />
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+</style>

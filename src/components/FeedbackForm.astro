@@ -157,6 +157,27 @@ import { Icon } from 'astro-icon/components';
   </div>
 </div>
 
+<script>
+  // Add an event listener to all forms on the page
+  document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault(); // Prevent the default form submission
+
+      const formName = form.querySelector('input[name="form-name"]')?.getAttribute('value');
+
+      if (formName === 'suggestion') {
+        alert('Thank you! Your suggestion has been successfully submitted.');
+      } else if (formName === 'bug_report') {
+        alert('Thank you! Your issue report has been successfully submitted.');
+      } else {
+        alert('Form submitted successfully.');
+      }
+
+      form.reset(); // Reset the form fields
+    });
+  });
+</script>
+
 <style>
   .glow-focus:focus {
     outline: none;

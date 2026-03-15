@@ -3,6 +3,8 @@ import { Icon } from 'astro-icon/components';
 import Head from '@/components/common/Head.astro';
 import ThemeToggle from '@/components/ThemeToggle.astro';
 
+import siteData from '@/data/site.json';
+
 interface Props {
 	title: string;
 	description?: string;
@@ -12,7 +14,26 @@ const { title, description = 'The Product OS Hub' } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en">
+  <head>
+    <script is:inline>
+      const getThemePreference = () => {
+        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+          return localStorage.getItem('theme');
+        }
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      };
+      const isDark = getThemePreference() === 'dark';
+      document.documentElement.classList[isDark ? 'add' : 'remove']('dark');
+      if (typeof localStorage !== 'undefined') {
+        const observer = new MutationObserver(() => {
+          const isDark = document.documentElement.classList.contains('dark');
+          localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+      }
+    </script>
+  </head>
   <Head title={title} description={description} />
   <body class="bg-background-light dark:bg-background-dark font-sans text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300">
     <div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
@@ -20,8 +41,8 @@ const { title, description = 'The Product OS Hub' } = Astro.props;
       <header class="sticky top-0 z-50 flex items-center justify-between border-b border-slate-200 dark:border-border-dark bg-white/80 dark:bg-background-dark/80 backdrop-blur-md px-6 md:px-20 py-4 transition-colors duration-300">
         <div class="flex items-center gap-8">
           <div class="flex items-center gap-3 text-primary">
-            <Icon name="tabler:box" class="w-8 h-8" />
-            <h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight font-display">Product OS</h2>
+            <img src={siteData.logo} alt="Logo" class="w-8 h-8" data-editable="image" data-prop-src="logo" />
+            <h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight font-display" data-editable="text" data-prop="site_title">{siteData.site_title}</h2>
           </div>
           <nav class="hidden sm:flex items-center gap-4 md:gap-8">
             <a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="/changelog">Changelog</a>
@@ -61,7 +82,7 @@ const { title, description = 'The Product OS Hub' } = Astro.props;
         });
       </script>
 
-      <main class="flex-1 w-full mx-auto" data-editable="source" data-path={Astro.url.pathname} data-key="main">
+      <main class="flex-1 w-full mx-auto">
         <slot />
       </main>
 
@@ -70,8 +91,11 @@ const { title, description = 'The Product OS Hub' } = Astro.props;
         <div class="flex items-center gap-4">
           <span>© 2024 Product OS Hub</span>
           <span>•</span>
-          <a class="hover:text-primary" href="https://twitter.com">Twitter</a>
-          <a class="hover:text-primary" href="https://github.com">GitHub</a>
+          <div class="flex gap-4" data-editable="array" data-prop="social_links">
+            {siteData.social_links.map((link: { name: string; url: string }) => (
+              <a class="hover:text-primary" href={link.url}>{link.name}</a>
+            ))}
+          </div>
         </div>
       </footer>
     </div>

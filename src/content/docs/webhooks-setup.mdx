@@ -1,9 +1,41 @@
 ---
-title: "Webhooks Setup"
-description: "Configure webhooks for real-time events."
+title: "Configuring Webhooks"
+description: "Set up webhooks to receive real-time notifications when events occur in your account."
 category: "Webhooks"
-author: "Charlie"
+author: "Charlie Integration Team"
 updated_at: 2024-03-12
 ---
 
-This is the content for Webhooks Setup.
+
+Webhooks allow your system to receive HTTP POST payloads whenever specific events occur within Product OS.
+
+## 1. Create an Endpoint
+
+First, create a public HTTP endpoint on your server that can accept POST requests.
+
+```javascript
+const express = require('express');
+const app = express();
+app.use(express.json());
+
+app.post('/webhook', (req, res) => {
+  const event = req.body;
+  console.log(`Received event: ${event.type}`);
+  // Process the event...
+  res.status(200).send('Webhook received');
+});
+
+app.listen(3000, () => console.log('Webhook server listening on port 3000'));
+```
+
+## 2. Register the Webhook
+
+Navigate to **Settings > Webhooks** in the Product OS dashboard and click **Add Webhook**.
+
+Provide your endpoint URL and select the events you want to subscribe to (e.g., `user.created`, `invoice.paid`).
+
+## 3. Verify Signatures
+
+For security, we sign all webhook payloads. You should verify the signature to ensure the request originated from Product OS.
+
+Check the `X-ProductOS-Signature` header against your webhook secret.

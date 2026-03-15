@@ -2,22 +2,101 @@ paths:
   uploads: public/uploads
   static: public
 collections_config:
-  pages:
-    path: src/pages
-    icon: wysiwyg
-    disable_url: false
-    disable_add: false
-    disable_add_folder: false
-    disable_file_actions: false
-  source:
-    path: ''
-    name: Biome
-    icon: package_2
-    disable_url: false
-    disable_add: false
-    disable_add_folder: false
-    disable_file_actions: false
-timezone: America/Manaus
+  changelog:
+    path: src/content/changelog
+    name: Changelog
+    icon: history
+    _inputs:
+      date:
+        type: date
+        comment: The release date of this changelog item
+      type:
+        type: select
+        options:
+          values:
+            - Feature
+            - Improvement
+            - Bugfix
+            - Security
+            - Infrastructure
+      banner_image:
+        type: image
+      version:
+        type: text
+        comment: Must be a valid version string e.g., v2.4.0
+  roadmap:
+    path: src/content/roadmap
+    name: Roadmap
+    icon: map
+    _inputs:
+      status:
+        type: select
+        options:
+          values:
+            - Under Consideration
+            - Planned
+            - In Development
+            - Launched
+      category:
+        type: select
+        options:
+          values:
+            - UI/UX
+            - Analytics
+            - AI
+            - Security
+            - Infrastructure
+            - Core API
+            - Webhooks
+      progress:
+        type: number
+        options:
+          min: 0
+          max: 100
+        comment: Progress percentage (0-100)
+      priority:
+        type: select
+        options:
+          values:
+            - Low
+            - Medium
+            - High
+            - Critical
+  docs:
+    path: src/content/docs
+    name: Documentation
+    icon: article
+    _inputs:
+      updated_at:
+        type: date
+      featured_image:
+        type: image
+  data:
+    path: src/data
+    name: Data
+    icon: data_object
+_inputs:
+  title:
+    type: text
+  description:
+    type: textarea
+  content:
+    type: markdown
+  tags:
+    type: multiselect
+_editables:
+  text:
+    bold: true
+    italic: true
+    link: true
+  block:
+    format: p h2 h3 h4
+    bold: true
+    italic: true
+    link: true
+    bulletedlist: true
+    numberedlist: true
+timezone: UTC
 markdown:
   engine: commonmark
   options:

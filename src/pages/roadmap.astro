@@ -1,0 +1,104 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import RoadmapCard from '../components/RoadmapCard.astro';
+import { Icon } from 'astro-icon/components';
+
+// Fetch all roadmap items and group them by status
+const roadmapEntries = await getCollection('roadmap');
+
+const columns = [
+	{
+		title: 'Under Consideration',
+		color: 'bg-slate-500',
+		status: 'Under Consideration',
+	},
+	{ title: 'Planned', color: 'bg-amber-500', status: 'Planned' },
+	{
+		title: 'In Development',
+		color: 'bg-primary animate-pulse',
+		status: 'In Development',
+	},
+	{ title: 'Launched', color: 'bg-green-500', status: 'Launched' },
+];
+
+const getItemsByStatus = (status: string) => {
+	return roadmapEntries.filter((entry) => entry.data.status === status);
+};
+---
+
+<Layout title="Roadmap | Product OS Hub">
+	<div class="flex flex-col flex-1 px-6 py-8 max-w-[1400px] mx-auto w-full">
+
+		<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+			<div>
+				<div class="flex items-center gap-2 mb-2">
+					<span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-widest bg-primary/20 text-primary border border-primary/30 font-sans">v2.4.0-Alpha</span>
+				</div>
+				<h1 class="text-3xl font-bold tracking-tight text-slate-100 font-display">Feature Roadmap</h1>
+				<p class="text-slate-500 mt-1 max-w-md font-sans">Orchestrating the next generation of product infrastructure. Drag and drop to re-prioritize.</p>
+			</div>
+			<div class="flex gap-3">
+				<button class="flex items-center gap-2 bg-primary/5 border border-primary/20 text-slate-300 px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/10 transition-all font-sans">
+					<Icon name="tabler:filter" class="w-5 h-5" />
+					Filter
+				</button>
+				<button class="flex items-center gap-2 bg-primary text-background-dark px-4 py-2 rounded-lg text-sm font-bold hover:brightness-110 transition-all font-sans">
+					<Icon name="tabler:plus" class="w-5 h-5" />
+					New Feature
+				</button>
+			</div>
+		</div>
+
+		<!-- Kanban Board Layout -->
+		<div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 items-start overflow-x-auto pb-8">
+			{columns.map(column => {
+				const items = getItemsByStatus(column.status);
+				return (
+					<section class="kanban-column flex flex-col rounded-xl min-h-[600px] min-w-[300px]">
+						<div class="glass-header px-4 py-3 rounded-t-xl flex justify-between items-center">
+							<div class="flex items-center gap-2">
+								<div class={`w-2 h-2 rounded-full ${column.color}`}></div>
+								<h3 class="text-sm font-semibold text-slate-300 font-display">{column.title}</h3>
+								<span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-500 font-mono">
+									{items.length.toString().padStart(2, '0')}
+								</span>
+							</div>
+							<Icon name="tabler:dots" class="w-5 h-5 text-slate-600 cursor-pointer hover:text-slate-400" />
+						</div>
+
+						<!-- Drop Zone for Kanban Cards -->
+						<div class="p-4 flex flex-col gap-4">
+							{items.map(item => (
+								<RoadmapCard entry={item} />
+							))}
+						</div>
+					</section>
+				);
+			})}
+		</div>
+	</div>
+</Layout>
+
+<style>
+	.glass-header {
+		background: rgba(13, 242, 242, 0.03);
+		backdrop-filter: blur(12px);
+		border-bottom: 1px solid rgba(13, 242, 242, 0.1);
+	}
+	.kanban-column {
+		background: rgba(13, 242, 242, 0.01);
+		border: 1px solid rgba(13, 242, 242, 0.05);
+	}
+	::-webkit-scrollbar {
+		width: 4px;
+		height: 4px;
+	}
+	::-webkit-scrollbar-track {
+		background: transparent;
+	}
+	::-webkit-scrollbar-thumb {
+		background: rgba(13, 242, 242, 0.2);
+		border-radius: 10px;
+	}
+</style>

@@ -18,9 +18,9 @@ const docsEntries = await getCollection('docs');
 
 		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 			{docsEntries.length > 0 ? docsEntries.map(entry => (
-				<div class="p-6 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 hover:border-teal-400 dark:hover:border-primary/50 transition-colors shadow-sm dark:shadow-none">
+				<div class="p-6 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 hover:border-primary/50 dark:hover:border-primary/50 transition-colors shadow-sm dark:shadow-none">
 					<div class="mb-4">
-						<span class="px-2 py-1 text-xs rounded bg-teal-50 dark:bg-primary/20 text-teal-700 dark:text-primary border border-teal-200 dark:border-primary/30">
+						<span class="px-2 py-1 text-xs rounded bg-primary/10 dark:bg-primary/20 text-primary border border-primary/20 dark:border-primary/30">
 							{entry.data.category}
 						</span>
 					</div>

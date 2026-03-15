@@ -110,7 +110,7 @@
 	--font-display: "Space Grotesk", sans-serif;
 
 	/* Colors */
-	--color-primary: #0df2f2;
+	--color-primary: #3b82f6; /* Blue-500, visible in both light and dark modes */
 	--color-background-light: #f5f8f8;
 	--color-background-dark: #000000;
 	--color-neutral-dark: #111111;

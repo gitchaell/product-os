@@ -8,7 +8,7 @@ import { Icon } from 'astro-icon/components';
   <!-- Left Side: Submit a Suggestion -->
   <div class="p-8 lg:p-12 bg-white dark:bg-transparent transition-colors duration-300">
     <div class="flex items-center gap-3 mb-8">
-      <Icon name="tabler:bulb" class="w-6 h-6 text-teal-600 dark:text-primary" />
+      <Icon name="tabler:bulb" class="w-6 h-6 text-primary" />
       <h2 class="text-xl font-semibold text-slate-900 dark:text-white font-display">Submit a Suggestion</h2>
     </div>
 
@@ -25,7 +25,7 @@ import { Icon } from 'astro-icon/components';
           name="title"
           type="text"
           required
-          class="w-full bg-white dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-3 text-slate-900 dark:text-slate-200 focus:outline-none focus:border-teal-500 dark:focus:border-primary focus:ring-1 focus:ring-teal-500 dark:focus:ring-primary transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600 shadow-sm dark:shadow-inner"
+          class="w-full bg-white dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-3 text-slate-900 dark:text-slate-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600 shadow-sm dark:shadow-inner"
           placeholder="What's your big idea?"
         />
       </div>
@@ -37,7 +37,7 @@ import { Icon } from 'astro-icon/components';
             id="suggestion_category"
             name="category"
             required
-            class="w-full bg-white dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-3 text-slate-900 dark:text-slate-200 focus:outline-none focus:border-teal-500 dark:focus:border-primary focus:ring-1 focus:ring-teal-500 dark:focus:ring-primary appearance-none cursor-pointer transition-all shadow-sm dark:shadow-inner"
+            class="w-full bg-white dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-3 text-slate-900 dark:text-slate-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary appearance-none cursor-pointer transition-all shadow-sm dark:shadow-inner"
           >
             <option class="bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-200" value="UI/UX Improvements">UI/UX Improvements</option>
             <option class="bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-200" value="New Functionality">New Functionality</option>
@@ -57,12 +57,12 @@ import { Icon } from 'astro-icon/components';
           name="description"
           required
           rows="4"
-          class="w-full bg-white dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-3 text-slate-900 dark:text-slate-200 focus:outline-none focus:border-teal-500 dark:focus:border-primary focus:ring-1 focus:ring-teal-500 dark:focus:ring-primary transition-all resize-none placeholder:text-slate-400 dark:placeholder:text-slate-600 shadow-sm dark:shadow-inner"
+          class="w-full bg-white dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-3 text-slate-900 dark:text-slate-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all resize-none placeholder:text-slate-400 dark:placeholder:text-slate-600 shadow-sm dark:shadow-inner"
           placeholder="How would this improve your workflow?"
         ></textarea>
       </div>
 
-      <button type="submit" class="w-full bg-gradient-to-r from-teal-500 dark:from-primary to-teal-600 dark:to-primary/80 hover:from-teal-600 dark:hover:from-primary hover:to-teal-700 dark:hover:to-primary text-white dark:text-background-dark font-bold py-3 px-6 rounded-lg transition-all flex items-center justify-center gap-2 group shadow-md dark:shadow-[0_0_15px_rgba(13,242,242,0.3)] hover:shadow-lg dark:hover:shadow-[0_0_25px_rgba(13,242,242,0.5)] transform hover:-translate-y-0.5">
+      <button type="submit" class="w-full bg-primary hover:brightness-110 text-white dark:text-background-dark font-bold py-3 px-6 rounded-lg transition-all flex items-center justify-center gap-2 group shadow-md dark:shadow-[0_0_15px_var(--color-primary)] hover:shadow-lg transform hover:-translate-y-0.5">
         <span>Submit Suggestion</span>
         <Icon name="tabler:send" class="w-4 h-4 group-hover:translate-x-1 transition-transform" />
       </button>

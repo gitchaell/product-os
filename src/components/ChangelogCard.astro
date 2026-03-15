@@ -22,15 +22,15 @@ const formattedDate = new Date(date).toLocaleDateString('en-US', {
   It utilizes data-editable, data-prop, and data-prop-* attributes
   to make this component visually editable inside the CC editor.
 -->
-<div class="relative pl-12 md:pl-24 group" data-editable="source" data-path={`/src/content/changelog/${entry.id}`}>
+<div class="relative pl-12 md:pl-24 group">
   <!-- Timeline Indicator -->
   <div class="absolute left-4 md:left-8 top-2 -translate-x-1/2 w-4 h-4 rounded-full bg-slate-400 dark:bg-slate-800 z-10 border-4 border-white dark:border-background-dark group-hover:bg-primary transition-colors"></div>
 
   <div class="flex flex-col gap-6">
     <div class="flex items-center gap-4">
-      <span class="text-slate-500 font-mono text-sm font-bold tracking-widest uppercase" data-editable="text" data-prop="version">{version}</span>
+      <span class="text-slate-500 font-mono text-sm font-bold tracking-widest uppercase" data-editable="text" data-prop={`@file[/src/content/changelog/${entry.id}].version`}>{version}</span>
       <span class="text-slate-500 text-sm hidden sm:inline">&bull;</span>
-      <span class="text-slate-500 text-sm font-medium" data-editable="text" data-prop="date">{formattedDate}</span>
+      <span class="text-slate-500 text-sm font-medium" data-editable="text" data-prop={`@file[/src/content/changelog/${entry.id}].date`}>{formattedDate}</span>
     </div>
 
     <div class="grid grid-cols-1 gap-6">
@@ -39,19 +39,19 @@ const formattedDate = new Date(date).toLocaleDateString('en-US', {
           <span
             class="bg-primary/10 text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-primary/20"
             data-editable="text"
-            data-prop="type"
+            data-prop={`@file[/src/content/changelog/${entry.id}].type`}
           >
             {type}
           </span>
         </div>
 
         <!-- Editable Title -->
-        <h3 class="text-xl font-bold mb-4" data-editable="text" data-prop="title" data-type="span">
+        <h3 class="text-xl font-bold mb-4" data-editable="text" data-prop={`@file[/src/content/changelog/${entry.id}].title`} data-type="span">
           {title}
         </h3>
 
         <!-- Editable Markdown Content (Renders the MD body) -->
-        <div class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6 prose prose-sm dark:prose-invert" data-editable="text" data-prop="@content" data-type="block">
+        <div class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6 prose prose-sm dark:prose-invert" >
           <slot />
         </div>
 
@@ -62,7 +62,7 @@ const formattedDate = new Date(date).toLocaleDateString('en-US', {
               alt={title}
               class="object-cover w-full h-full"
               data-editable="image"
-              data-prop-src="banner_image"
+              data-prop-src={`@file[/src/content/changelog/${entry.id}].banner_image`}
             />
           </div>
         )}

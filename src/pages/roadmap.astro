@@ -1,8 +1,8 @@
 ---
-import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
-import RoadmapCard from '../components/RoadmapCard.astro';
 import { Icon } from 'astro-icon/components';
+import RoadmapCard from '../components/RoadmapCard.astro';
+import Layout from '../layouts/Layout.astro';
 
 // Fetch all roadmap items and group them by status
 const roadmapEntries = await getCollection('roadmap');

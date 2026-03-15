@@ -1,0 +1,46 @@
+---
+import { getCollection } from 'astro:content';
+import { Icon } from 'astro-icon/components';
+import Layout from '../layouts/Layout.astro';
+
+// Fetch all docs items
+const docsEntries = await getCollection('docs');
+---
+
+<Layout title="Documentation | Product OS Hub">
+	<div class="flex flex-col flex-1 px-6 py-8 max-w-[1400px] mx-auto w-full">
+		<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+			<div>
+				<h1 class="text-3xl font-bold tracking-tight text-slate-100 font-display">Documentation</h1>
+				<p class="text-slate-500 mt-1 max-w-md font-sans">Guides, API references, and system architecture.</p>
+			</div>
+		</div>
+
+		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+			{docsEntries.length > 0 ? docsEntries.map(entry => (
+				<div class="p-6 rounded-xl border border-slate-800 bg-slate-900/50 hover:border-primary/50 transition-colors">
+					<div class="mb-4">
+						<span class="px-2 py-1 text-xs rounded bg-primary/20 text-primary border border-primary/30">
+							{entry.data.category}
+						</span>
+					</div>
+					<h2 class="text-xl font-bold text-slate-200 mb-2">{entry.data.title}</h2>
+					<p class="text-slate-400 text-sm mb-4">
+						{entry.data.description}
+					</p>
+					{entry.data.author && (
+						<div class="text-slate-500 text-xs mt-2">
+							By {entry.data.author}
+						</div>
+					)}
+				</div>
+			)) : (
+				<div class="col-span-full p-12 text-center rounded-xl border border-slate-800 border-dashed">
+					<Icon name="tabler:file-description" class="w-12 h-12 text-slate-600 mx-auto mb-4" />
+					<h3 class="text-lg font-medium text-slate-300">No documentation found</h3>
+					<p class="text-slate-500 mt-2">Documentation articles will appear here once they are added.</p>
+				</div>
+			)}
+		</div>
+	</div>
+</Layout>

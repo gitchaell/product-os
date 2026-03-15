@@ -7,7 +7,7 @@ interface Props {
 
 const { entry } = Astro.props;
 const { data } = entry;
-const { title, status, category, assignees = [], progress, priority } = data;
+const { title, category, assignees = [], progress } = data;
 
 // Simple color mapping per category
 const categoryColors: Record<string, string> = {

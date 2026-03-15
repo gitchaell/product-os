@@ -1,0 +1,42 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+
+// Fetch all changelog items
+const changelogEntries = await getCollection('changelog');
+---
+
+<Layout title="Changelog | Product OS Hub">
+	<div class="flex flex-col flex-1 px-6 py-8 max-w-[1400px] mx-auto w-full">
+		<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+			<div>
+				<h1 class="text-3xl font-bold tracking-tight text-slate-100 font-display">Changelog</h1>
+				<p class="text-slate-500 mt-1 max-w-md font-sans">Latest updates and improvements to the platform.</p>
+			</div>
+		</div>
+
+		<div class="flex flex-col gap-6">
+			{changelogEntries.map(entry => (
+				<div class="p-6 rounded-xl border border-slate-800 bg-slate-900/50">
+					<div class="flex justify-between items-start mb-4">
+						<h2 class="text-xl font-bold text-slate-200">{entry.data.title}</h2>
+						<span class="px-2 py-1 text-xs rounded bg-primary/20 text-primary border border-primary/30">
+							{entry.data.version}
+						</span>
+					</div>
+					<div class="text-slate-400 mb-2">
+						{entry.data.date.toLocaleDateString()}
+					</div>
+					<div class="text-slate-300">
+						Type: <span class="text-white">{entry.data.type}</span>
+					</div>
+					{entry.data.author && (
+						<div class="text-slate-400 mt-2 text-sm">
+							Author: {entry.data.author}
+						</div>
+					)}
+				</div>
+			))}
+		</div>
+	</div>
+</Layout>

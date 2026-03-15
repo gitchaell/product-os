@@ -11,21 +11,21 @@ const docsEntries = await getCollection('docs');
 	<div class="flex flex-col flex-1 px-6 py-8 max-w-[1400px] mx-auto w-full">
 		<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
 			<div>
-				<h1 class="text-3xl font-bold tracking-tight text-slate-100 font-display">Documentation</h1>
-				<p class="text-slate-500 mt-1 max-w-md font-sans">Guides, API references, and system architecture.</p>
+				<h1 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100 font-display">Documentation</h1>
+				<p class="text-slate-600 dark:text-slate-500 mt-1 max-w-md font-sans">Guides, API references, and system architecture.</p>
 			</div>
 		</div>
 
 		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 			{docsEntries.length > 0 ? docsEntries.map(entry => (
-				<div class="p-6 rounded-xl border border-slate-800 bg-slate-900/50 hover:border-primary/50 transition-colors">
+				<div class="p-6 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 hover:border-primary/50 dark:hover:border-primary/50 transition-colors shadow-sm dark:shadow-none">
 					<div class="mb-4">
-						<span class="px-2 py-1 text-xs rounded bg-primary/20 text-primary border border-primary/30">
+						<span class="px-2 py-1 text-xs rounded bg-primary/10 dark:bg-primary/20 text-primary border border-primary/20 dark:border-primary/30">
 							{entry.data.category}
 						</span>
 					</div>
-					<h2 class="text-xl font-bold text-slate-200 mb-2">{entry.data.title}</h2>
-					<p class="text-slate-400 text-sm mb-4">
+					<h2 class="text-xl font-bold text-slate-800 dark:text-slate-200 mb-2">{entry.data.title}</h2>
+					<p class="text-slate-600 dark:text-slate-400 text-sm mb-4">
 						{entry.data.description}
 					</p>
 					{entry.data.author && (
@@ -35,10 +35,10 @@ const docsEntries = await getCollection('docs');
 					)}
 				</div>
 			)) : (
-				<div class="col-span-full p-12 text-center rounded-xl border border-slate-800 border-dashed">
-					<Icon name="tabler:file-description" class="w-12 h-12 text-slate-600 mx-auto mb-4" />
-					<h3 class="text-lg font-medium text-slate-300">No documentation found</h3>
-					<p class="text-slate-500 mt-2">Documentation articles will appear here once they are added.</p>
+				<div class="col-span-full p-12 text-center rounded-xl border border-slate-300 dark:border-slate-800 border-dashed bg-white/30 dark:bg-transparent">
+					<Icon name="tabler:file-description" class="w-12 h-12 text-slate-400 dark:text-slate-600 mx-auto mb-4" />
+					<h3 class="text-lg font-medium text-slate-700 dark:text-slate-300">No documentation found</h3>
+					<p class="text-slate-500 dark:text-slate-500 mt-2">Documentation articles will appear here once they are added.</p>
 				</div>
 			)}
 		</div>

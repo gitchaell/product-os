@@ -22,14 +22,37 @@ const { title, description = 'The Product OS Hub' } = Astro.props;
             <Icon name="tabler:box" class="w-8 h-8" />
             <h2 class="text-slate-100 text-lg font-bold leading-tight tracking-tight font-display">Product OS</h2>
           </div>
-          <nav class="hidden md:flex items-center gap-8">
+          <nav class="hidden sm:flex items-center gap-4 md:gap-8">
             <a class="text-slate-400 hover:text-primary text-sm font-medium transition-colors" href="/changelog">Changelog</a>
             <a class="text-slate-400 hover:text-primary text-sm font-medium transition-colors" href="/roadmap">Roadmap</a>
             <a class="text-slate-400 hover:text-primary text-sm font-medium transition-colors" href="/docs">Docs</a>
             <a class="text-slate-400 hover:text-primary text-sm font-medium transition-colors" href="/feedback">Feedback</a>
           </nav>
         </div>
+        <!-- Mobile nav icon -->
+        <button class="sm:hidden text-slate-400 hover:text-primary transition-colors focus:outline-none" aria-label="Menu" id="mobile-menu-btn">
+          <Icon name="tabler:menu-2" class="w-6 h-6" />
+        </button>
       </header>
+
+      <!-- Mobile menu -->
+      <div id="mobile-menu" class="hidden sm:hidden bg-background-dark/95 backdrop-blur-md border-b border-border-dark px-6 py-4 fixed top-[65px] left-0 w-full z-40 flex flex-col gap-4">
+        <a class="text-slate-300 hover:text-primary text-lg font-medium transition-colors" href="/changelog">Changelog</a>
+        <a class="text-slate-300 hover:text-primary text-lg font-medium transition-colors" href="/roadmap">Roadmap</a>
+        <a class="text-slate-300 hover:text-primary text-lg font-medium transition-colors" href="/docs">Docs</a>
+        <a class="text-slate-300 hover:text-primary text-lg font-medium transition-colors" href="/feedback">Feedback</a>
+      </div>
+
+      <script>
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+
+        if (btn && menu) {
+          btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+          });
+        }
+      </script>
 
       <main class="flex-1 w-full mx-auto" data-editable="source" data-path={Astro.url.pathname} data-key="main">
         <slot />

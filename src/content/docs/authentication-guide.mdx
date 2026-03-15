@@ -1,0 +1,30 @@
+---
+title: "API Authentication Guide"
+description: "Learn how to securely authenticate your applications with the Product OS API."
+category: "Core API"
+author: "Alice API Team"
+updated_at: 2024-03-10
+---
+
+
+To interact with the Product OS API, you must authenticate your requests. We offer two primary methods: API Keys and Bearer Tokens.
+
+## Using API Keys
+
+API Keys are the simplest way to get started. You can generate an API key in your account settings.
+
+### Including the Key in Requests
+
+Include your API key in the `Authorization` header of your HTTP requests.
+
+```bash
+curl -X GET "https://api.product-os.io/v1/users"   -H "Authorization: Bearer YOUR_API_KEY"   -H "Content-Type: application/json"
+```
+
+> **Warning**: Never share your API key or commit it to version control. If your key is compromised, revoke it immediately and generate a new one.
+
+## Using Bearer Tokens (OAuth)
+
+For applications acting on behalf of a user, use OAuth 2.0 to obtain a Bearer Token.
+
+See the [OAuth Integration Guide](/docs/oauth-integration) for detailed instructions on the authorization flow.

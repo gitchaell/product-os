@@ -1,12 +1,12 @@
 {
 	"headers": [
 		{
-			"url": "/*",
-			"headers": {
-				"X-Frame-Options": "DENY",
-				"X-Content-Type-Options": "nosniff",
-				"Referrer-Policy": "strict-origin-when-cross-origin"
-			}
+			"match": "/*",
+			"headers": [
+				{ "name": "X-Frame-Options", "value": "DENY" },
+				{ "name": "X-Content-Type-Options", "value": "nosniff" },
+				{ "name": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+			]
 		}
 	],
 	"routes": []

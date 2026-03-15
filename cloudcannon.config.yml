@@ -6,40 +6,53 @@ collections_config:
     path: src/content/changelog
     name: Changelog
     icon: history
+    disable_url: false
     _inputs:
       date:
         type: date
         comment: The release date of this changelog item
+        cascade: true
       type:
         type: select
         options:
+          allow_empty: true
           values:
             - Feature
             - Improvement
             - Bugfix
             - Security
             - Infrastructure
+        cascade: true
       banner_image:
         type: image
+        cascade: true
       version:
         type: text
         comment: Must be a valid version string e.g., v2.4.0
+        cascade: true
+    disable_add: false
+    disable_add_folder: false
+    disable_file_actions: false
   roadmap:
     path: src/content/roadmap
     name: Roadmap
     icon: map
+    disable_url: false
     _inputs:
       status:
         type: select
         options:
+          allow_empty: true
           values:
             - Under Consideration
             - Planned
             - In Development
             - Launched
+        cascade: true
       category:
         type: select
         options:
+          allow_empty: true
           values:
             - UI/UX
             - Analytics
@@ -48,58 +61,93 @@ collections_config:
             - Infrastructure
             - Core API
             - Webhooks
+        cascade: true
       progress:
         type: number
         options:
           min: 0
           max: 100
         comment: Progress percentage (0-100)
+        cascade: true
       priority:
         type: select
         options:
+          allow_empty: true
           values:
             - Low
             - Medium
             - High
             - Critical
+        cascade: true
+    disable_add: false
+    disable_add_folder: false
+    disable_file_actions: false
   docs:
     path: src/content/docs
     name: Documentation
     icon: article
+    disable_url: false
     _inputs:
       updated_at:
         type: date
+        cascade: true
       featured_image:
         type: image
+        cascade: true
+    disable_add: false
+    disable_add_folder: false
+    disable_file_actions: false
   data:
     path: src/data
     name: Data
     icon: data_object
+    disable_url: false
     _inputs:
       logo:
         type: image
+        cascade: true
       site_title:
         type: text
+        cascade: true
+    disable_add: false
+    disable_add_folder: false
+    disable_file_actions: false
+  pages:
+    path: src/pages
+    icon: wysiwyg
+    disable_url: false
+    disable_add: false
+    disable_add_folder: false
+    disable_file_actions: false
 _inputs:
   title:
     type: text
+    cascade: true
   description:
     type: textarea
+    cascade: true
   content:
     type: markdown
+    cascade: true
   tags:
     type: multiselect
+    cascade: true
 _editables:
   text:
+    allow_custom_markup: true
+    remove_custom_markup: false
     bold: true
     italic: true
     link: true
   block:
-    format: p h2 h3 h4
+    allow_custom_markup: false
+    remove_custom_markup: false
     bold: true
+    bulletedlist: true
+    format: p h2 h3 h4
+    image_size_attributes: true
     italic: true
     link: true
-    bulletedlist: true
     numberedlist: true
 timezone: UTC
 markdown:

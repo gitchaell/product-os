@@ -75,6 +75,11 @@ collections_config:
     path: src/data
     name: Data
     icon: data_object
+    _inputs:
+      logo:
+        type: image
+      site_title:
+        type: text
 _inputs:
   title:
     type: text

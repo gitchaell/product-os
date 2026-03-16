@@ -12,5 +12,11 @@
 			]
 		}
 	],
-	"routes": []
+	"routes": [
+    {
+      "match": "/old-docs",
+      "status": 301,
+      "to": "/docs"
+    }
+  ]
 }

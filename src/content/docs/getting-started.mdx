@@ -10,12 +10,37 @@ updated_at: 2024-03-15
 
 Welcome to the **Product OS**! This guide will help you get up and running quickly.
 
-## Setup
+## Requirements
 
-1. Install the CLI using `npm install -g product-os-cli`.
-2. Authenticate your account: `pos login`.
-3. Create your first project: `pos init my-project`.
+Before starting, ensure you have the following installed:
+
+- **Node.js** (v18.0.0 or later)
+- **NPM** (v9.0.0 or later)
+- An active Product OS account.
+
+## Setup Instructions
+
+1. **Install the CLI:**
+   You can install the official command-line interface via npm:
+   ```bash
+   npm install -g @product-os/cli
+   ```
+
+2. **Authenticate your account:**
+   Log in to connect your local environment with your Product OS workspace:
+   ```bash
+   pos login
+   ```
+   *This command will open a browser window to authenticate using OAuth.*
+
+3. **Initialize your first project:**
+   Run the setup command in your workspace directory:
+   ```bash
+   pos init my-project
+   ```
 
 ## Next Steps
 
-Check out our API references for advanced configurations.
+Now that your project is created, explore the following resources:
+- Review the [Core API Reference](/docs/api-reference) for integration details.
+- Learn about configuring secure endpoints in the [Authentication Guide](/docs/authentication-guide).

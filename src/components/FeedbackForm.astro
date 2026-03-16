@@ -16,7 +16,8 @@ import { Icon } from 'astro-icon/components';
     <!-- The action can be left blank or pointed to a success page, but CloudCannon automatically captures it by name -->
     <form action="/success" method="POST" class="space-y-6">
       <!-- Implicitly identify this form to CloudCannon -->
-      <input type="hidden" name="form-name" value="suggestion" />
+      <input type="hidden" name="inbox_key" value="suggestion" />
+      <input type="text" name="_gotcha" style="display: none;" />
 
       <div class="group">
         <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2" for="suggestion_title">Feature Name</label>
@@ -79,7 +80,8 @@ import { Icon } from 'astro-icon/components';
     <!-- Second CloudCannon Form Handling for Issue reporting -->
     <!-- enctype="multipart/form-data" is required for file uploads natively -->
     <form action="/success" method="POST" enctype="multipart/form-data" class="space-y-6">
-      <input type="hidden" name="form-name" value="bug_report" />
+      <input type="hidden" name="inbox_key" value="bug_report" />
+      <input type="text" name="_gotcha" style="display: none;" />
 
       <div class="group">
         <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2" for="issue_title">Issue Title</label>
@@ -158,23 +160,53 @@ import { Icon } from 'astro-icon/components';
 </div>
 
 <script>
+  // Helper function to get form data in the supported format
+  function getFormDataString(formEl: HTMLFormElement) {
+    var formData = new FormData(formEl),
+      data = [];
+
+    for (var keyValue of formData) {
+      data.push(encodeURIComponent(keyValue[0] as string) + "=" + encodeURIComponent(keyValue[1] as string));
+    }
+
+    return data.join("&");
+  }
+
   document.addEventListener('astro:page-load', () => {
     // Add an event listener to all forms on the page
     document.querySelectorAll('form').forEach(form => {
       form.addEventListener('submit', (e) => {
         e.preventDefault(); // Prevent the default form submission
 
-        const formName = form.querySelector('input[name="form-name"]')?.getAttribute('value');
+        const formName = form.querySelector('input[name="inbox_key"]')?.getAttribute('value');
 
-        if (formName === 'suggestion') {
-          alert('Thank you! Your suggestion has been successfully submitted.');
-        } else if (formName === 'bug_report') {
-          alert('Thank you! Your issue report has been successfully submitted.');
+        // Ensure form submission to CloudCannon through AJAX request
+        var request = new XMLHttpRequest();
+        request.addEventListener("load", function () {
+          if (request.status === 303 || request.status === 200 || request.status === 302) { // CloudCannon redirects or successes
+            if (formName === 'suggestion') {
+              alert('Thank you! Your suggestion has been successfully submitted.');
+            } else if (formName === 'bug_report') {
+              alert('Thank you! Your issue report has been successfully submitted.');
+            } else {
+              alert('Form submitted successfully.');
+            }
+            form.reset(); // Reset the form fields
+          } else {
+             alert('There was a problem submitting your form.');
+          }
+        });
+
+        // Use standard POST action. In astro this acts seamlessly with CloudCannon
+        request.open(form.method, form.action);
+        if(form.enctype === 'multipart/form-data'){
+           // Let browser set the correct content type with boundary
+           request.send(new FormData(form));
         } else {
-          alert('Form submitted successfully.');
+           request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+           request.send(getFormDataString(form));
         }
 
-        form.reset(); // Reset the form fields
       });
     });
   });

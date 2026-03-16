@@ -5,9 +5,20 @@ category: API
 author: Platform Team
 updated_at: 2024-03-14T00:00:00Z
 ---
+
 # Core API Reference
 
-The Product OS Core API allows you to integrate programmatically with our services.
+The Product OS Core API provides programmatic access to your projects, users, and organization settings. All API endpoints use REST principles and return JSON-formatted responses.
+
+## Authentication
+
+All API requests require authentication via a Bearer token. Include the token in the `Authorization` header of your HTTP requests:
+
+```http
+Authorization: Bearer <your_api_token>
+```
+
+You can generate API tokens from the Settings page in the Product OS Dashboard.
 
 ## Base URL
 
@@ -17,8 +28,60 @@ The Product OS Core API allows you to integrate programmatically with our servic
 
 ### `GET /projects`
 
-Returns a list of your projects.
+Retrieves a paginated list of projects belonging to the authenticated user's organization.
+
+#### Query Parameters
+- `limit` (optional): Maximum number of projects to return (default is 50).
+- `status` (optional): Filter projects by status (e.g., `active`, `archived`).
+
+#### Response Example
+```json
+{
+  "data": [
+    {
+      "id": "prj_01A2B3C4D5",
+      "name": "My First Project",
+      "status": "active",
+      "created_at": "2024-03-10T12:00:00Z"
+    }
+  ],
+  "meta": {
+    "total": 1,
+    "limit": 50
+  }
+}
+```
 
 ### `POST /projects`
 
-Creates a new project.
+Creates a new project within the organization.
+
+#### Request Body
+```json
+{
+  "name": "New Project Name",
+  "description": "A description of the project.",
+  "visibility": "private"
+}
+```
+
+#### Response Example
+```json
+{
+  "id": "prj_09F8E7D6C5",
+  "name": "New Project Name",
+  "status": "active",
+  "created_at": "2024-03-15T09:30:00Z"
+}
+```
+
+### Error Handling
+
+If an error occurs, the API returns standard HTTP status codes along with a JSON response containing an error message.
+
+```json
+{
+  "error": "unauthorized",
+  "message": "Invalid API token provided."
+}
+```

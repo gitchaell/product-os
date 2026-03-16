@@ -8,4 +8,4 @@ assignees:
 progress: 10
 priority: "High"
 ---
-The next major version of the Core API, introducing GraphQL support and better performance.
+The next major version of the Core API, introducing full GraphQL support, enhanced payload limits, and a completely rewritten caching layer designed to improve throughput by 40%.

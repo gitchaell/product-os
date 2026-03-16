@@ -1,8 +1,8 @@
 ---
-title: "Bugfixes and Enhancements"
+title: "Bugfixes & Initial Polish"
 description: "A summary of the changes in this update."
 version: "v1.0.1"
-date: 2024-02-15
+date: 2023-09-01
 type: "Bugfix"
 author: "Bob Jones"
 ---

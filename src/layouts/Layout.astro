@@ -63,9 +63,20 @@ const latestVersion =
       </div>
 
       <script>
+        import { gsap } from "gsap";
+
         document.addEventListener('astro:page-load', () => {
           const btn = document.getElementById('mobile-menu-btn');
           const menu = document.getElementById('mobile-menu');
+
+          // Header animation
+          gsap.from("header", {y: -20, opacity: 0, duration: 0.4, ease: "power2.out"});
+
+          // Cards reveal animation
+          gsap.fromTo('.gs-reveal',
+            { y: 20, opacity: 0 },
+            { y: 0, opacity: 1, stagger: 0.05, duration: 0.4, ease: 'power2.out', clearProps: 'all' }
+          );
 
           if (btn && menu) {
             btn.addEventListener('click', () => {
@@ -82,7 +93,7 @@ const latestVersion =
       <!-- Footer common across screens -->
       <footer class="mt-32 pt-12 border-t border-slate-200 dark:border-border-dark flex flex-col md:flex-row justify-between items-center gap-8 text-slate-500 text-sm px-6 pb-6 transition-colors duration-300">
         <div class="flex items-center gap-4">
-          <span>© 2024 Product OS Hub</span>
+          <span>© <span id="current-year">{new Date().getFullYear()}</span> <span data-editable="text" data-prop="@data[site].site_title">{siteData.site_title}</span></span>
           <span>•</span>
           <div class="flex gap-4" >
             <div class="flex gap-4" data-editable="array" data-prop="@data[site].social_links">

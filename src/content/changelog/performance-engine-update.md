@@ -1,8 +1,8 @@
 ---
-title: The Performance Engine Update
+title: "Performance Engine Overhaul"
 description: "A summary of the changes in this update."
-version: v2.4.0
-date: 2023-10-24T00:00:00Z
+version: "v1.6.0"
+date: 2023-12-20T00:00:00Z
 type: Feature
 tags:
   - Performance

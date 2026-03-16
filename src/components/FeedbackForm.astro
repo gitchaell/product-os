@@ -204,7 +204,7 @@ import { Icon } from 'astro-icon/components';
 
   document.addEventListener('astro:page-load', () => {
     // Add an event listener to all forms on the page
-    document.querySelectorAll('form').forEach(form => {
+    document.querySelectorAll<HTMLFormElement>('form:not([method="dialog"])').forEach(form => {
       form.addEventListener('submit', (e) => {
         e.preventDefault(); // Prevent the default form submission
 

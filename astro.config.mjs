@@ -2,6 +2,7 @@
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'astro/config';
 import icon from 'astro-icon';
+import editableRegions from '@cloudcannon/editable-regions/astro-integration';
 
 import mdx from '@astrojs/mdx';
 
@@ -11,5 +12,5 @@ export default defineConfig({
     vite: {
         plugins: [tailwindcss()],
     },
-    integrations: [icon(), mdx()],
+    integrations: [editableRegions(), icon(), mdx()],
 });

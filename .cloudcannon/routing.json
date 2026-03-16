@@ -14,7 +14,7 @@
 	],
 	"routes": [
     {
-      "match": "/old-docs",
+      "from": "/old-docs",
       "status": 301,
       "to": "/docs"
     }

@@ -16,7 +16,8 @@ import { Icon } from 'astro-icon/components';
     <!-- The action can be left blank or pointed to a success page, but CloudCannon automatically captures it by name -->
     <form action="/success" method="POST" class="space-y-6">
       <!-- Implicitly identify this form to CloudCannon -->
-      <input type="hidden" name="inbox_key" value="suggestion" />
+      <input type="hidden" name="inbox_key" value="feedback-form" />
+      <input type="hidden" name="form_type" value="suggestion" />
       <input type="text" name="_gotcha" style="display: none;" />
 
       <div class="group">
@@ -80,7 +81,8 @@ import { Icon } from 'astro-icon/components';
     <!-- Second CloudCannon Form Handling for Issue reporting -->
     <!-- enctype="multipart/form-data" is required for file uploads natively -->
     <form action="/success" method="POST" enctype="multipart/form-data" class="space-y-6">
-      <input type="hidden" name="inbox_key" value="bug_report" />
+      <input type="hidden" name="inbox_key" value="feedback-form" />
+      <input type="hidden" name="form_type" value="bug_report" />
       <input type="text" name="_gotcha" style="display: none;" />
 
       <div class="group">
@@ -178,7 +180,7 @@ import { Icon } from 'astro-icon/components';
       form.addEventListener('submit', (e) => {
         e.preventDefault(); // Prevent the default form submission
 
-        const formName = form.querySelector('input[name="inbox_key"]')?.getAttribute('value');
+        const formName = form.querySelector('input[name="form_type"]')?.getAttribute('value');
 
         // Ensure form submission to CloudCannon through AJAX request
         var request = new XMLHttpRequest();

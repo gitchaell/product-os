@@ -6,6 +6,7 @@ const changelog = defineCollection({
 	loader: glob({ pattern: '**/*.md', base: './src/content/changelog' }),
 	schema: z.object({
 		title: z.string(),
+		description: z.string().optional(),
 		version: z
 			.string()
 			.regex(

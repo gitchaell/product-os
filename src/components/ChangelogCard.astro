@@ -7,7 +7,7 @@ interface Props {
 
 const { entry } = Astro.props;
 const { data } = entry;
-const { title, version, date, type, banner_image } = data;
+const { title, description, version, date, type, banner_image } = data;
 
 // Format the date for display
 const formattedDate = new Date(date).toLocaleDateString('en-US', {
@@ -22,7 +22,7 @@ const formattedDate = new Date(date).toLocaleDateString('en-US', {
   It utilizes data-editable, data-prop, and data-prop-* attributes
   to make this component visually editable inside the CC editor.
 -->
-<div class="relative pl-12 md:pl-24 group">
+<div class="relative pl-12 md:pl-24 group" data-editable="source" data-path={`/src/content/changelog/${entry.id}`}>
   <!-- Timeline Indicator -->
   <div class="absolute left-4 md:left-8 top-2 -translate-x-1/2 w-4 h-4 rounded-full bg-slate-400 dark:bg-slate-800 z-10 border-4 border-white dark:border-background-dark group-hover:bg-primary transition-colors"></div>
 
@@ -50,9 +50,9 @@ const formattedDate = new Date(date).toLocaleDateString('en-US', {
           {title}
         </h3>
 
-        <!-- Editable Markdown Content (Renders the MD body) -->
-        <div class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6 prose prose-sm dark:prose-invert" data-editable="text" data-prop={`@collections[changelog].${entry.id}.@content`} data-type="block">
-          <slot />
+        <!-- Editable Description -->
+        <div class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6 prose prose-sm dark:prose-invert" data-editable="text" data-prop={`@collections[changelog].${entry.id}.description`} data-type="block">
+          {description}
         </div>
 
         {banner_image && (

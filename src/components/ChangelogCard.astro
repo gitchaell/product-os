@@ -22,7 +22,7 @@ const formattedDate = new Date(date).toLocaleDateString('en-US', {
   It utilizes data-editable, data-prop, and data-prop-* attributes
   to make this component visually editable inside the CC editor.
 -->
-<div class="relative pl-12 md:pl-24 group" >
+<div class="relative pl-12 md:pl-24 group" data-editable="source" data-path={`/src/content/changelog/${entry.id}`}>
   <!-- Timeline Indicator -->
   <div class="absolute left-4 md:left-8 top-2 -translate-x-1/2 w-4 h-4 rounded-full bg-slate-400 dark:bg-slate-800 z-10 border-4 border-white dark:border-background-dark group-hover:bg-primary transition-colors"></div>
 

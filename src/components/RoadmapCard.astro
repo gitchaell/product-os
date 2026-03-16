@@ -11,21 +11,26 @@ const { title, category, assignees = [], progress } = data;
 
 // Simple color mapping per category
 const categoryColors: Record<string, string> = {
-	'UI/UX': 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-700',
-	Analytics: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20',
+	'UI/UX':
+		'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-700',
+	Analytics:
+		'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20',
 	AI: 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20',
-	Security: 'bg-amber-500/10 text-amber-600 dark:text-amber-500 border-amber-500/20',
+	Security:
+		'bg-amber-500/10 text-amber-600 dark:text-amber-500 border-amber-500/20',
 	Infrastructure: 'bg-primary/10 text-primary border-primary/20',
 	'Core API': 'bg-primary/10 text-primary border-primary/20',
-	Webhooks: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
+	Webhooks:
+		'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
 };
 
 const categoryClasses =
-	categoryColors[category] || 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-700';
+	categoryColors[category] ||
+	'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-700';
 ---
 
 <!-- Roadmap Card -->
-<a href={`/roadmap/${entry.id}`} class="block bg-white dark:bg-[rgba(255,255,255,0.02)] border border-slate-200 dark:border-[rgba(13,242,242,0.08)] hover:border-primary/50 dark:hover:border-primary/50 hover:bg-slate-50/50 dark:hover:bg-[rgba(255,255,255,0.04)] p-4 rounded-xl transition-all cursor-pointer text-inherit no-underline">
+<a href={`/roadmap/${entry.id}`} class="block bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-primary/50 dark:hover:border-primary/50 hover:bg-slate-50/50 dark:hover:bg-slate-800/50 p-4 rounded-xl transition-all cursor-pointer text-inherit no-underline">
 	<div class="flex justify-between items-start mb-3">
 		<span class={`px-2 py-0.5 rounded-full text-[10px] border font-sans ${categoryClasses}`}>
 			{category}
@@ -75,11 +80,11 @@ const categoryClasses =
 	<!-- Mock Approvals/Rejections -->
 	<div class="flex items-center gap-3 mt-4 text-xs text-slate-500 dark:text-slate-400">
 		<div class="flex items-center gap-1">
-			<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-green-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>
+			<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-green-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
 			<span>{Math.floor(Math.random() * 50) + 10}</span>
 		</div>
 		<div class="flex items-center gap-1">
-			<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"></path></svg>
+			<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
 			<span>{Math.floor(Math.random() * 10)}</span>
 		</div>
 	</div>

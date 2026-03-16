@@ -30,7 +30,7 @@ const formattedDate = new Date(date).toLocaleDateString('en-US', {
     </div>
 
     <div class="grid grid-cols-1 gap-6">
-      <a href={`/changelog/${entry.id}`} class="block glass rounded-xl p-8 group hover:border-primary/50 dark:hover:border-primary/50 transition-all hover:bg-slate-50/50 dark:hover:bg-slate-900/50 cursor-pointer text-inherit no-underline">
+      <a href={`/changelog/${entry.id}`} class="block bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-8 group hover:border-primary/50 dark:hover:border-primary/50 transition-all hover:bg-slate-50/50 dark:hover:bg-slate-800/50 cursor-pointer text-inherit no-underline shadow-sm dark:shadow-none glass">
         <div class="flex gap-2 mb-4">
           <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-primary/20">
             {type}
@@ -61,8 +61,6 @@ const formattedDate = new Date(date).toLocaleDateString('en-US', {
 
 <style>
   .glass {
-    background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
   }
 </style>

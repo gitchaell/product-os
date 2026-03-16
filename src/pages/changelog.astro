@@ -1,17 +1,22 @@
 ---
 import { getCollection, render } from 'astro:content';
-import Layout from '../layouts/Layout.astro';
 import ChangelogCard from '../components/ChangelogCard.astro';
+import Layout from '../layouts/Layout.astro';
 
 // Fetch all changelog items
 const changelogEntries = await getCollection('changelog');
+
+// Sort by date (newest first)
+changelogEntries.sort(
+	(a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf(),
+);
 
 // Render the content for each entry so it can be passed as a slot
 const renderedEntries = await Promise.all(
 	changelogEntries.map(async (entry) => {
 		const { Content } = await render(entry);
 		return { entry, Content };
-	})
+	}),
 );
 ---
 

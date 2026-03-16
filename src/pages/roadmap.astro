@@ -31,9 +31,6 @@ const getItemsByStatus = (status: string) => {
 
 		<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
 			<div>
-				<div class="flex items-center gap-2 mb-2">
-					<span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-widest bg-primary/20 text-primary border border-primary/30 font-sans">v2.4.0-Alpha</span>
-				</div>
 				<h1 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100 font-display" data-editable="source" data-path="/src/pages/roadmap.astro" data-key="title">Feature Roadmap</h1>
 				<p class="text-slate-600 dark:text-slate-500 mt-1 max-w-md font-sans" data-editable="source" data-path="/src/pages/roadmap.astro" data-key="description">Orchestrating the next generation of product infrastructure.</p>
 			</div>
@@ -56,8 +53,8 @@ const getItemsByStatus = (status: string) => {
 			{columns.map((column, index) => {
 				const items = getItemsByStatus(column.status);
 				return (
-					<section class={`kanban-column flex flex-col rounded-xl min-h-[600px] min-w-[300px] bg-slate-50/50 dark:bg-transparent border border-slate-200 dark:border-[rgba(13,242,242,0.05)] ${index !== 0 ? 'hidden md:flex' : 'flex'}`} data-column={column.status}>
-						<div class="glass-header px-4 py-3 rounded-t-xl flex justify-between items-center border-b border-slate-200 dark:border-[rgba(13,242,242,0.1)] bg-slate-100/50 dark:bg-[rgba(13,242,242,0.03)]">
+					<section class={`kanban-column flex flex-col rounded-xl min-h-[600px] min-w-[300px] bg-slate-50/50 dark:bg-slate-900/20 border border-slate-200 dark:border-primary/10 ${index !== 0 ? 'hidden md:flex' : 'flex'}`} data-column={column.status}>
+						<div class="glass-header px-4 py-3 rounded-t-xl flex justify-between items-center border-b border-slate-200 dark:border-primary/20 bg-slate-100/50 dark:bg-primary/5">
 							<div class="flex items-center gap-2">
 								<div class={`w-2 h-2 rounded-full ${column.color}`}></div>
 								<h3 class="text-sm font-semibold text-slate-800 dark:text-slate-300 font-display">{column.title}</h3>
@@ -133,7 +130,8 @@ const getItemsByStatus = (status: string) => {
 		background: transparent;
 	}
 	::-webkit-scrollbar-thumb {
-		background: rgba(13, 242, 242, 0.2);
+		background: var(--color-primary);
+		opacity: 0.2;
 		border-radius: 10px;
 	}
 </style>

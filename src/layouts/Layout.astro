@@ -1,4 +1,5 @@
 ---
+import { getCollection } from 'astro:content';
 import { Icon } from 'astro-icon/components';
 import Head from '@/components/common/Head.astro';
 import ThemeToggle from '@/components/ThemeToggle.astro';
@@ -11,6 +12,14 @@ interface Props {
 }
 
 const { title, description = 'The Product OS Hub' } = Astro.props;
+
+// Fetch latest version from changelog
+const changelogEntries = await getCollection('changelog');
+changelogEntries.sort(
+	(a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf(),
+);
+const latestVersion =
+	changelogEntries.length > 0 ? changelogEntries[0].data.version : 'v1.0.0';
 ---
 
 <!doctype html>
@@ -23,7 +32,10 @@ const { title, description = 'The Product OS Hub' } = Astro.props;
         <div class="flex items-center gap-8">
           <div class="flex items-center gap-3 text-primary" >
             <img src={siteData.logo} alt="Logo" class="w-8 h-8" data-editable="image" data-prop-src="@data[site].logo" />
-            <h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight font-display" data-editable="text" data-prop="@data[site].site_title">{siteData.site_title}</h2>
+            <div class="flex items-center gap-2">
+              <h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight font-display" data-editable="text" data-prop="@data[site].site_title">{siteData.site_title}</h2>
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-widest bg-primary/10 text-primary border border-primary/20 font-sans hidden sm:inline-block">{latestVersion}</span>
+            </div>
           </div>
           <nav class="hidden sm:flex items-center gap-4 md:gap-8">
             <a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="/changelog">Changelog</a>

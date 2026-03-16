@@ -1,5 +1,6 @@
 ---
 title: "UI Overhaul & Accessibility Updates"
+description: "A summary of the changes in this update."
 version: "v1.5.0"
 date: 2024-02-15
 type: "Improvement"

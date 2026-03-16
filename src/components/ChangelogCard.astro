@@ -7,7 +7,7 @@ interface Props {
 
 const { entry } = Astro.props;
 const { data } = entry;
-const { title, version, date, type, banner_image } = data;
+const { title, description, version, date, type, banner_image } = data;
 
 // Format the date for display
 const formattedDate = new Date(date).toLocaleDateString('en-US', {
@@ -50,9 +50,9 @@ const formattedDate = new Date(date).toLocaleDateString('en-US', {
           {title}
         </h3>
 
-        <!-- Editable Markdown Content (Renders the MD body) -->
-        <div class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6 prose prose-sm dark:prose-invert" data-editable="text" data-prop={`@collections[changelog].${entry.id}.@content`} data-type="block">
-          <slot />
+        <!-- Editable Description -->
+        <div class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6 prose prose-sm dark:prose-invert" data-editable="text" data-prop={`@collections[changelog].${entry.id}.description`} data-type="block">
+          {description}
         </div>
 
         {banner_image && (

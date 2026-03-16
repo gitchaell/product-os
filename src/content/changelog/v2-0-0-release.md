@@ -1,5 +1,6 @@
 ---
 title: "Product OS v2.0.0 is Here! 🚀"
+description: "A summary of the changes in this update."
 version: "v2.0.0"
 date: 2024-03-01
 type: "Feature"

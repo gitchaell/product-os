@@ -1,5 +1,6 @@
 ---
 title: The Performance Engine Update
+description: "A summary of the changes in this update."
 version: v2.4.0
 date: 2023-10-24T00:00:00Z
 type: Feature

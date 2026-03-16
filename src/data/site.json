@@ -1,22 +1,22 @@
 {
-  "site_title": "Product OS",
-  "logo": "/favicon.svg",
-  "social_links": [
-    {
-      "name": "Twitter",
-      "url": "https://twitter.com/productos"
-    },
-    {
-      "name": "GitHub",
-      "url": "https://github.com/productos"
-    },
-    {
-      "name": "LinkedIn",
-      "url": "https://linkedin.com/company/productos"
-    },
-    {
-      "name": "Discord",
-      "url": "https://discord.gg/productos"
-    }
-  ]
+	"site_title": "Product OS",
+	"logo": "/favicon.svg",
+	"social_links": [
+		{
+			"name": "Twitter",
+			"url": "https://twitter.com/productos"
+		},
+		{
+			"name": "GitHub",
+			"url": "https://github.com/productos"
+		},
+		{
+			"name": "LinkedIn",
+			"url": "https://linkedin.com/company/productos"
+		},
+		{
+			"name": "Discord",
+			"url": "https://discord.gg/productos"
+		}
+	]
 }

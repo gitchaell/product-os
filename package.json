@@ -30,6 +30,7 @@
 		"@astrojs/mdx": "^5.0.0",
 		"@astrojs/sitemap": "^3.7.1",
 		"@astrojs/ts-plugin": "^1.10.7",
+		"@cloudcannon/editable-regions": "^0.0.12",
 		"@iconify-json/tabler": "^1.2.31",
 		"@tailwindcss/typography": "^0.5.19",
 		"@tailwindcss/vite": "^4.2.1",

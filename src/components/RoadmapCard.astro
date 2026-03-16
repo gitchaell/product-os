@@ -27,7 +27,7 @@ const categoryClasses =
 <!--
   Roadmap Card - visually editable item inside a Roadmap column
 -->
-<a href={`/roadmap/${entry.id}`} class="block bg-white dark:bg-[rgba(255,255,255,0.02)] border border-slate-200 dark:border-[rgba(13,242,242,0.08)] hover:border-primary/50 dark:hover:border-primary/50 hover:bg-slate-50/50 dark:hover:bg-[rgba(255,255,255,0.04)] p-4 rounded-xl transition-all cursor-pointer text-inherit no-underline" data-editable="source" data-path={`/src/content/roadmap/${entry.id}`} data-key="main">
+<a href={`/roadmap/${entry.id}`} class="block bg-white dark:bg-[rgba(255,255,255,0.02)] border border-slate-200 dark:border-[rgba(13,242,242,0.08)] hover:border-primary/50 dark:hover:border-primary/50 hover:bg-slate-50/50 dark:hover:bg-[rgba(255,255,255,0.04)] p-4 rounded-xl transition-all cursor-pointer text-inherit no-underline">
 	<div class="flex justify-between items-start mb-3">
 		<span class={`px-2 py-0.5 rounded-full text-[10px] border font-sans ${categoryClasses}`} data-editable="text" data-prop={`@collections[roadmap].${entry.id}.category`}>
 			{category}

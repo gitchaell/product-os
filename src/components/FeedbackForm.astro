@@ -14,7 +14,7 @@ import { Icon } from 'astro-icon/components';
 
     <!-- CloudCannon Form Handling - uses native standard form element -->
     <!-- The action can be left blank or pointed to a success page, but CloudCannon automatically captures it by name -->
-    <form action="/success" method="POST" class="space-y-6">
+    <form action="/feedback" method="POST" class="space-y-6">
       <!-- Implicitly identify this form to CloudCannon -->
       <input type="hidden" name="inbox_key" value="feedback-form" />
       <input type="hidden" name="form_type" value="suggestion" />
@@ -80,7 +80,7 @@ import { Icon } from 'astro-icon/components';
 
     <!-- Second CloudCannon Form Handling for Issue reporting -->
     <!-- enctype="multipart/form-data" is required for file uploads natively -->
-    <form action="/success" method="POST" enctype="multipart/form-data" class="space-y-6">
+    <form action="/feedback" method="POST" enctype="multipart/form-data" class="space-y-6">
       <input type="hidden" name="inbox_key" value="feedback-form" />
       <input type="hidden" name="form_type" value="bug_report" />
       <input type="text" name="_gotcha" style="display: none;" />
@@ -161,6 +161,34 @@ import { Icon } from 'astro-icon/components';
   </div>
 </div>
 
+<!-- Success Dialog -->
+<dialog id="success_dialog" class="bg-white dark:bg-[#102222] p-8 rounded-xl shadow-2xl border border-slate-200 dark:border-white/10 backdrop:bg-slate-900/50 backdrop:backdrop-blur-sm transition-all text-center w-full max-w-sm m-auto">
+  <div class="flex items-center justify-center w-16 h-16 mx-auto mb-6 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-full">
+    <Icon name="tabler:check" class="w-8 h-8" />
+  </div>
+  <h3 id="dialog_title" class="text-xl font-bold text-slate-900 dark:text-white mb-2 font-display">Success!</h3>
+  <p id="dialog_message" class="text-slate-600 dark:text-slate-400 mb-8">Your submission has been successfully received.</p>
+  <form method="dialog">
+    <button class="w-full bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-200 text-white dark:text-slate-900 font-bold py-3 px-6 rounded-lg transition-colors">
+      Close
+    </button>
+  </form>
+</dialog>
+
+<!-- Error Dialog -->
+<dialog id="error_dialog" class="bg-white dark:bg-[#102222] p-8 rounded-xl shadow-2xl border border-slate-200 dark:border-white/10 backdrop:bg-slate-900/50 backdrop:backdrop-blur-sm transition-all text-center w-full max-w-sm m-auto">
+  <div class="flex items-center justify-center w-16 h-16 mx-auto mb-6 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-full">
+    <Icon name="tabler:alert-triangle" class="w-8 h-8" />
+  </div>
+  <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2 font-display">Something went wrong</h3>
+  <p class="text-slate-600 dark:text-slate-400 mb-8">There was a problem submitting your form. Please try again later.</p>
+  <form method="dialog">
+    <button class="w-full bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-200 text-white dark:text-slate-900 font-bold py-3 px-6 rounded-lg transition-colors">
+      Close
+    </button>
+  </form>
+</dialog>
+
 <script>
   // Helper function to get form data in the supported format
   function getFormDataString(formEl: HTMLFormElement) {
@@ -185,17 +213,30 @@ import { Icon } from 'astro-icon/components';
         // Ensure form submission to CloudCannon through AJAX request
         var request = new XMLHttpRequest();
         request.addEventListener("load", function () {
+          const successDialog = document.getElementById('success_dialog') as HTMLDialogElement;
+          const errorDialog = document.getElementById('error_dialog') as HTMLDialogElement;
+          const dialogTitle = document.getElementById('dialog_title');
+          const dialogMessage = document.getElementById('dialog_message');
+
           if (request.status === 303 || request.status === 200 || request.status === 302) { // CloudCannon redirects or successes
-            if (formName === 'suggestion') {
-              alert('Thank you! Your suggestion has been successfully submitted.');
-            } else if (formName === 'bug_report') {
-              alert('Thank you! Your issue report has been successfully submitted.');
-            } else {
-              alert('Form submitted successfully.');
+            if (dialogTitle && dialogMessage && successDialog) {
+              if (formName === 'suggestion') {
+                dialogTitle.textContent = 'Suggestion Submitted';
+                dialogMessage.textContent = 'Thank you! Your idea has been successfully shared with our team.';
+              } else if (formName === 'bug_report') {
+                dialogTitle.textContent = 'Issue Reported';
+                dialogMessage.textContent = 'Thank you! Our engineers will review your bug report shortly.';
+              } else {
+                dialogTitle.textContent = 'Success!';
+                dialogMessage.textContent = 'Your form has been successfully submitted.';
+              }
+              successDialog.showModal();
             }
             form.reset(); // Reset the form fields
           } else {
-             alert('There was a problem submitting your form.');
+             if (errorDialog) {
+               errorDialog.showModal();
+             }
           }
         });
 

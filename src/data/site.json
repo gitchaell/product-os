@@ -1,22 +1,22 @@
 {
 	"site_title": "Product OS",
-	"logo": "/favicon.svg",
+	"logo": "/uploads/logo.png",
 	"social_links": [
 		{
-			"name": "Twitter",
-			"url": "https://twitter.com/productos"
+			"name": "X",
+			"url": "https://x.com/product-os"
 		},
 		{
 			"name": "GitHub",
-			"url": "https://github.com/productos"
+			"url": "https://github.com/product-os"
 		},
 		{
 			"name": "LinkedIn",
-			"url": "https://linkedin.com/company/productos"
+			"url": "https://linkedin.com/company/product-os"
 		},
 		{
 			"name": "Discord",
-			"url": "https://discord.gg/productos"
+			"url": "https://discord.gg/product-os"
 		}
 	]
 }

@@ -1,48 +1,94 @@
-# Product OS: Centralizando la Comunicación de Producto
+# Arquitectura de Product OS: Unificación Estática de la Comunicación de Producto
 
-[📸 Insertar captura: Vista principal de Product OS mostrando el layout minimalista con el Changelog activo y las pestañas de Roadmap y Docs en la navegación superior]
+[📸 Captura: Logo minimalista de Product OS en el centro]
 
-En el desarrollo de software, mantener un registro organizado del estado y la evolución de un producto suele requerir la gestión de múltiples plataformas aisladas. Esta fragmentación dificulta que tanto usuarios como equipos internos tengan una visión clara del historial de actualizaciones, los planes a futuro y la documentación técnica de la herramienta.
+El desarrollo de software requiere más que la sola implementación de código; exige una estructura informativa coherente para comunicar su estado y evolución. Frecuentemente, el registro de versiones, la planificación a futuro y la documentación técnica residen en sistemas separados, obligando a los usuarios e ingenieros a buscar contexto a través de múltiples herramientas.
 
-**Product OS** es la solución que diseñé para unificar estos tres componentes críticos en un solo lugar. Mi objetivo fue construir un portal integrado, rápido y fácil de navegar, donde el registro de cambios (Changelog), la hoja de ruta (Roadmap) y la base de conocimiento (Docs) conviven dentro del mismo ecosistema.
-
----
-
-## Estructura del Proyecto
-
-El sistema está diseñado para ser directo y funcional, estructurando la información del ciclo de vida del producto en tres áreas principales:
-
-*   **Changelog:** Un registro cronológico detallado de lanzamientos y actualizaciones. Permite documentar nuevas características, mejoras, correcciones de errores y actualizaciones de seguridad de forma estructurada.
-*   **Roadmap:** Una vista de planificación que comunica el estado actual de las iniciativas. Muestra qué funcionalidades están bajo consideración, planeadas, en desarrollo activo o ya lanzadas, organizadas por categoría y prioridad.
-*   **Documentación:** Una base de conocimiento integrada directamente en el portal, facilitando el acceso a guías técnicas y tutoriales sin tener que abandonar el entorno del producto.
-
-[📸 Insertar captura: Vista de una tarjeta del Roadmap, mostrando el estado, la categoría, la prioridad y los asignados, demostrando la claridad de la interfaz]
+Para resolver esta fragmentación operativa, diseñé **Product OS**. Esta herramienta es una infraestructura centralizada que consolida el registro de cambios (Changelog), la hoja de ruta de desarrollo (Roadmap) y la base de conocimiento técnica (Docs). La utilidad principal de este proyecto es reducir la fricción en la transferencia de conocimiento, asegurando que cualquier actor tenga acceso estructurado y validado a la realidad del producto desde una única interfaz determinista.
 
 ---
 
-## Bajo el capó: Arquitectura y Stack
+## Lógica de Negocio y Flujos Operativos
 
-Desde una perspectiva técnica, Product OS es una aplicación web moderna construida con un enfoque en el rendimiento de entrega (Static Site Generation / Server-Side Rendering) y la gestión estricta de contenido estructurado.
+La plataforma no es una aplicación transaccional, sino un sistema de consulta de datos altamente estructurado. Se divide en tres flujos informativos integrados:
 
-El stack tecnológico que he seleccionado y configurado incluye:
+1.  **Auditoría de Actualizaciones (Changelog):** El sistema procesa y renderiza un historial cronológico estricto. Cada versión (ej., `v1.2.0`) es categorizada semánticamente (Feature, Bugfix, Security) y validada. Permite al usuario reconstruir el historial evolutivo del software de forma inmediata.
+2.  **Visibilidad de Planificación (Roadmap):** Se gestiona el ciclo de vida de las iniciativas futuras. El flujo permite visualizar tareas mediante estados predefinidos (`Under Consideration`, `Planned`, `In Development`, `Launched`), mostrando metadatos como prioridad, categoría, progreso y desarrolladores asignados.
+3.  **Transferencia de Conocimiento (Docs):** La documentación se compila estáticamente dentro del portal. Los usuarios pueden transitar desde el descubrimiento de una característica en el Changelog hacia su guía de implementación en los Docs, compartiendo el mismo enrutamiento y estado del cliente.
 
-*   **Astro v5+:** El núcleo del proyecto, utilizado por su rendimiento y su arquitectura de islas. Implementa *View Transitions* para ofrecer una navegación fluida entre el Changelog, Roadmap y la Documentación sin recargas completas de página.
-*   **Tailwind CSS v4:** Utilizado para la estilización ágil de componentes y la implementación nativa de un sistema de modo claro y oscuro consistente en toda la aplicación.
-*   **Content Collections (Zod):** La gestión de datos es puramente basada en archivos Markdown y MDX. He definido esquemas estrictos de validación con Zod en `src/content.config.ts` para garantizar que cada entrada del Changelog y el Roadmap contenga todos los metadatos requeridos (versiones, estados, categorías, fechas) antes de que el sitio pueda compilarse.
-*   **Gestión Centralizada (JSON):** Los datos globales del sitio (títulos, logos, enlaces sociales) se administran de forma independiente en `src/data/site.json`, facilitando actualizaciones sin tocar el código fuente de los componentes.
-*   **Biome.js & Vitest:** Configurados para mantener la calidad y el formato del código de manera unificada y rápida, además de preparar el terreno para pruebas unitarias.
-
-[📸 Insertar captura: Fragmento de código de `src/content.config.ts` mostrando el esquema estricto de validación Zod para asegurar la integridad de los datos del Roadmap]
+[📸 Captura: Interfaz principal mostrando la navegación entre las tres dimensiones informativas del producto]
 
 ---
 
-## Próximos Pasos y Contacto
+## Análisis Arquitectónico y Modelado
 
-Product OS demuestra cómo la infraestructura de comunicación de un producto puede ser tan sólida y estructurada como el producto mismo, centralizando la verdad en un formato fácilmente consumible y escalable.
+El portal fue construido priorizando tiempos de carga instantáneos, First Contentful Paint (FCP) mínimo y un SEO estático robusto. Se aparta deliberadamente de los CMS dinámicos tradicionales o arquitecturas SPA masivas en favor de una solución generada estáticamente (SSG) y fuertemente validada en el backend de compilación.
 
-*   Puedes explorar el código fuente completo y la estructura del proyecto en el [repositorio en GitHub](#).
-*   Para ejecutar el proyecto localmente y probar la interfaz, simplemente clona el repositorio y ejecuta `npm run dev`.
-*   Si te interesa discutir sobre arquitectura frontend, gestión de producto o colaborar en un proyecto, [conecta conmigo a través de mi sitio web](#).
+### Arquitectura General y Patrones
+
+El proyecto adopta un patrón arquitectónico basado en **Generación de Sitios Estáticos (SSG) con Arquitectura de Islas**, sustentado en Astro.
+
+*   **Ruteo en el Cliente (Client-Side Routing):** Para mitigar la navegación tradicional de múltiples cargas completas (Multi-Page Application), se implementaron las **Astro View Transitions**. Esto proporciona una navegación que simula una SPA, preservando el estado de la UI (como el modo oscuro `dark:` mediante el `ThemeToggle`) sin sobrecargar el hilo principal.
+*   **Separación de Metadatos Globales:** Los datos genéricos del sitio (nombre, logo, enlaces sociales) están desacoplados de los componentes y almacenados estáticamente en `src/data/site.json`, implementando un patrón de configuración centralizada mediante alias de rutas (`@/data`).
+*   **Gestión de Formularios Serverless:** La recolección de retroalimentación de usuarios (`FeedbackForm.astro`) se gestiona delegando la captura de envíos a la infraestructura de CloudCannon (vía atributos ocultos como `inbox_key`), manteniendo la pureza estática del frontend sin requerir un backend propio.
+
+```mermaid
+graph TD
+    A[Markdown/MDX Files] --> B{Astro Content Collections}
+    C[Zod Schemas] --> B
+    B -- Validated Data --> D[Astro SSG Engine]
+    E[site.json] --> D
+    D -- Compiles --> F[Static HTML/CSS/JS]
+    F -- View Transitions --> G[Client Browser]
+```
+
+### Modelado de Datos y Validación Estricta
+
+La aplicación prescinde de una base de datos relacional. Implementa un patrón de **Content Collections**, donde los datos actúan como el modelo de dominio principal, gestionado a nivel del sistema de archivos mediante Markdown (Changelog/Roadmap) y MDX (Docs).
+
+La integridad del dominio es garantizada *antes* del tiempo de compilación utilizando esquemas de validación estricta con **Zod** en `src/content.config.ts`. Si un documento Markdown contiene un estado de Roadmap inválido o una versión mal formateada, el pipeline de compilación falla explícitamente, previniendo errores en producción.
+
+```mermaid
+erDiagram
+    CHANGELOG {
+        string title
+        string description "optional"
+        string version "Regex validated e.g. v2.4.0"
+        date date
+        enum type "Feature | Bugfix | Security | etc."
+        string[] tags "optional"
+    }
+
+    ROADMAP {
+        string title
+        enum status "Planned | In Development | Launched"
+        enum category "UI/UX | Security | API | etc."
+        object[] assignees "optional"
+        number progress "0 to 100, optional"
+        enum priority "Low | Medium | High | Critical"
+    }
+
+    DOCS {
+        string title
+        string description
+        string category
+    }
+
+    SYSTEM ||--|{ CHANGELOG : "Validates against Schema"
+    SYSTEM ||--|{ ROADMAP : "Validates against Schema"
+    SYSTEM ||--|{ DOCS : "Validates against Schema"
+```
+
+### Stack Tecnológico
+
+| Herramienta | Función Arquitectónica | Justificación Técnica |
+| :--- | :--- | :--- |
+| **Astro (v6+)** | Core Engine / Framework SSG | Arquitectura zero-JS por defecto, soporte nativo de Content Collections e integración directa de View Transitions. |
+| **TypeScript & Zod** | Tipado y Validación de Dominio | Garantiza que las propiedades inyectadas desde el CMS (archivos locales) cumplan estrictamente los contratos de datos en tiempo de compilación. |
+| **Tailwind CSS (v4)** | Sistema de Estilos Utilitario | Eliminación de CSS no utilizado, estandarización de tokens de diseño y manejo nativo de clases `.dark` para esquemas de color invertidos. |
+| **GSAP** | Motor de Micro-Interacciones | Orquestación imperativa de animaciones complejas (como la barra de progreso de inicio). Envuelto en los eventos `astro:page-load` para persistencia durante las transiciones de vista. |
+| **Biome.js** | Linter y Formatter | Unificación del análisis estático del código fuente. Reemplaza la cadena de herramientas tradicional (ESLint + Prettier) por un binario único ultrarrápido escrito en Rust. |
 
 ---
-*Autor: Arquitecto de Software y Desarrollador Frontend.*
+
+La conjunción de Astro, la validación estricta de dominios con Zod y la entrega estática demuestran que la consolidación de la información de producto no requiere infraestructuras pesadas. Esta arquitectura minimiza drásticamente los vectores de ataque, abstrae la complejidad del escalamiento de bases de datos y asegura que cada compilación resulte en un artefacto determinista, inmutable y altamente performante.

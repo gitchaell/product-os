@@ -13,10 +13,10 @@
 		}
 	],
 	"routes": [
-		{
-			"from": "/old-docs",
-			"status": 301,
-			"to": "/docs"
-		}
-	]
+    {
+      "from": "/old-docs",
+      "status": 301,
+      "to": "/docs"
+    }
+  ]
 }

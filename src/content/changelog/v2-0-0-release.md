@@ -1,11 +1,11 @@
 ---
-title: "Product OS v2.0.0 Release"
-description: "A summary of the changes in this update."
+title: "Product OS v2.0.0 is Here! 🚀"
 version: "v2.0.0"
-date: 2024-01-10
+date: 2024-03-01
 type: "Feature"
 author: "Alice Engineering"
 ---
+
 
 We are thrilled to announce the official release of Product OS v2.0.0! This release brings major improvements to our core architecture, providing unparalleled performance and scalability.
 

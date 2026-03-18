@@ -1,3 +1,44 @@
 ---
-return Astro.redirect('/changelog');
+import Layout from '@/layouts/Layout.astro';
 ---
+
+<Layout title="Product OS">
+  <div class="flex flex-col items-center justify-center min-h-[50vh] px-6 text-center">
+    <div class="max-w-sm w-full">
+      <h1 class="text-2xl font-display font-bold text-slate-900 dark:text-white mb-6 animate-pulse">
+        Loading Product OS...
+      </h1>
+
+      <div class="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-2 mb-4 overflow-hidden">
+        <div id="progress-bar" class="bg-primary h-2 rounded-full w-0 transition-all duration-1000 ease-out"></div>
+      </div>
+
+      <p class="text-slate-500 dark:text-slate-400 text-sm">
+        Redirecting to changelog
+      </p>
+    </div>
+  </div>
+
+  <script>
+    import { navigate } from 'astro:transitions/client';
+
+    document.addEventListener('astro:page-load', () => {
+      // Only run this logic on the root path
+      if (window.location.pathname === '/') {
+        const progressBar = document.getElementById('progress-bar');
+
+        // Start the progress bar animation shortly after mount
+        setTimeout(() => {
+          if (progressBar) {
+            progressBar.style.width = '100%';
+          }
+        }, 50);
+
+        // Navigate after 1 second (matching the CSS duration-1000)
+        setTimeout(() => {
+          navigate('/changelog');
+        }, 1050);
+      }
+    });
+  </script>
+</Layout>

@@ -1,11 +1,11 @@
 ---
-title: "UI Overhaul & Accessibility"
-description: "A summary of the changes in this update."
+title: "UI Overhaul & Accessibility Updates"
 version: "v1.5.0"
-date: 2023-10-15
+date: 2024-02-15
 type: "Improvement"
 author: "Bob Design"
 ---
+
 
 In this update, we focused heavily on refining the user interface and ensuring our platform is accessible to everyone.
 

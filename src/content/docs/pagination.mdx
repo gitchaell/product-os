@@ -1,0 +1,16 @@
+---
+title: "API Pagination"
+description: "How to navigate through large datasets returned by the API."
+category: "Core API"
+author: "Alice API Team"
+updated_at: 2024-04-05
+---
+
+
+Endpoints that return collections use cursor-based pagination.
+
+## Requesting Pages
+
+Use the `limit` parameter to specify the number of items per page. The response will include a `next_cursor` value if there are more items.
+
+Pass the `next_cursor` value as the `cursor` parameter in your subsequent request.

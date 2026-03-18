@@ -74,6 +74,63 @@ We've made significant strides in meeting WCAG guidelines.
 
 *We believe great software should be usable by all.*
         """
+    },
+    {
+        "id": "v2-1-0-release.md",
+        "title": "Advanced Reporting & Exporting",
+        "version": "v2.1.0",
+        "date": "2024-04-15",
+        "type": "Feature",
+        "author": "Charlie Data",
+        "content": """
+Our latest update introduces comprehensive reporting features that allow you to extract maximum value from your data.
+
+## 📊 Detailed Reports
+
+Generate in-depth reports covering user engagement, API usage, and system performance over custom date ranges.
+
+## 📥 Export Options
+
+You can now export reports and raw data to CSV and PDF formats directly from the dashboard.
+
+## 🔔 Scheduled Deliveries
+
+Set up automated report deliveries to your email on a daily, weekly, or monthly basis.
+        """
+    },
+    {
+        "id": "v2-1-1-patch.md",
+        "title": "Minor Fixes and Enhancements",
+        "version": "v2.1.1",
+        "date": "2024-04-20",
+        "type": "Bugfix",
+        "author": "Dana Support",
+        "content": """
+This patch addresses several minor bugs reported by our community and includes a few quality-of-life enhancements.
+
+- Fixed an issue where the date picker would occasionally reset.
+- Improved loading speeds on the billing page.
+- Clarified error messages during failed API requests.
+        """
+    },
+    {
+        "id": "v2-2-0-integrations.md",
+        "title": "New Third-Party Integrations",
+        "version": "v2.2.0",
+        "date": "2024-05-10",
+        "type": "Feature",
+        "author": "Eve Connect",
+        "content": """
+We're expanding our ecosystem! You can now seamlessly connect Product OS with your favorite tools.
+
+## 🔗 Supported Integrations
+
+- **Slack:** Receive real-time notifications directly in your team's channel.
+- **Jira:** Automatically create tickets from flagged issues.
+- **GitHub:** Link commits to specific feature deployments.
+
+Explore the new Integrations tab in your settings to get started.
+        """
     }
 ]
 
@@ -114,6 +171,45 @@ Enterprise customers need robust authentication mechanisms. We are planning a co
 - **Granular Permissions:** Introduce fine-grained access control lists (ACLs).
 
 This project is currently in the design phase, and we are gathering requirements from our enterprise design partners.
+        """
+    },
+    {
+        "id": "dark-mode-support.md",
+        "title": "Comprehensive Dark Mode",
+        "status": "Launched",
+        "category": "UI/UX",
+        "progress": 100,
+        "priority": "Medium",
+        "content": """
+We have successfully rolled out full dark mode support across the entire platform.
+
+Users can now toggle between light and dark themes, or set it to respect their system preferences automatically.
+        """
+    },
+    {
+        "id": "mobile-app.md",
+        "title": "Native Mobile App (iOS & Android)",
+        "status": "Under Consideration",
+        "category": "UI/UX",
+        "progress": 0,
+        "priority": "Low",
+        "content": """
+We are evaluating the feasibility of developing a native mobile application to allow users to manage their workspace on the go.
+
+Current considerations include feature parity with the web application and offline capabilities.
+        """
+    },
+    {
+        "id": "ai-insights.md",
+        "title": "AI-Powered Data Insights",
+        "status": "In Development",
+        "category": "AI",
+        "progress": 30,
+        "priority": "High",
+        "content": """
+Integrating machine learning models to automatically highlight trends and anomalies in your data.
+
+This feature will proactively alert you to significant changes, reducing the need for manual data analysis.
         """
     }
 ]
@@ -193,6 +289,63 @@ For security, we sign all webhook payloads. You should verify the signature to e
 
 Check the `X-ProductOS-Signature` header against your webhook secret.
         """
+    },
+    {
+        "id": "rate-limits.mdx",
+        "title": "Understanding Rate Limits",
+        "description": "Details on how rate limiting works and how to handle HTTP 429 responses.",
+        "category": "Core API",
+        "author": "Alice API Team",
+        "updated_at": "2024-03-25",
+        "content": """
+To ensure system stability, we enforce rate limits on API requests.
+
+## Standard Limits
+
+Most endpoints are limited to 100 requests per minute per user.
+
+## Handling 429 Errors
+
+If you exceed the limit, the API will respond with an `HTTP 429 Too Many Requests` error.
+
+You should implement an exponential backoff strategy in your application to retry requests gracefully.
+        """
+    },
+    {
+        "id": "pagination.mdx",
+        "title": "API Pagination",
+        "description": "How to navigate through large datasets returned by the API.",
+        "category": "Core API",
+        "author": "Alice API Team",
+        "updated_at": "2024-04-05",
+        "content": """
+Endpoints that return collections use cursor-based pagination.
+
+## Requesting Pages
+
+Use the `limit` parameter to specify the number of items per page. The response will include a `next_cursor` value if there are more items.
+
+Pass the `next_cursor` value as the `cursor` parameter in your subsequent request.
+        """
+    },
+    {
+        "id": "error-handling.mdx",
+        "title": "Error Handling best practices",
+        "description": "A guide on interpreting and handling API errors effectively.",
+        "category": "Core API",
+        "author": "David Support",
+        "updated_at": "2024-04-10",
+        "content": """
+Our API uses conventional HTTP response codes to indicate the success or failure of an API request.
+
+## Common Error Codes
+
+- **400 Bad Request:** The request was invalid or cannot be otherwise served.
+- **401 Unauthorized:** Missing or incorrect authentication credentials.
+- **403 Forbidden:** The authenticated user does not have access to the requested resource.
+- **404 Not Found:** The requested resource could not be found.
+- **500 Internal Server Error:** Something went wrong on our end.
+        """
     }
 ]
 
@@ -203,7 +356,7 @@ def write_md(folder, item):
     content = "---\n"
     for k, v in item.items():
         if k not in ['id', 'content']:
-            if isinstance(v, str):
+            if isinstance(v, str) and k != 'date' and k != 'updated_at':
                 content += f'{k}: "{v}"\n'
             else:
                 content += f'{k}: {v}\n'

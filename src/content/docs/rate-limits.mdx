@@ -1,0 +1,20 @@
+---
+title: "Understanding Rate Limits"
+description: "Details on how rate limiting works and how to handle HTTP 429 responses."
+category: "Core API"
+author: "Alice API Team"
+updated_at: 2024-03-25
+---
+
+
+To ensure system stability, we enforce rate limits on API requests.
+
+## Standard Limits
+
+Most endpoints are limited to 100 requests per minute per user.
+
+## Handling 429 Errors
+
+If you exceed the limit, the API will respond with an `HTTP 429 Too Many Requests` error.
+
+You should implement an exponential backoff strategy in your application to retry requests gracefully.

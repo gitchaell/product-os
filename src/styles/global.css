@@ -1,11 +1,6 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-@layer base {
-	html {
-		font-feature-settings: "cv11" 1;
-	}
-}
 
 @custom-variant dark {
 	&:where(.dark, .dark *) {
@@ -123,5 +118,9 @@
 	/* Ensure cv11 is used for single-story 'a' in Geist Sans */
 	html {
 		font-feature-settings: "cv11" 1;
+		background-color: var(--color-background-light);
+	}
+	html.dark {
+		background-color: var(--color-background-dark);
 	}
 }

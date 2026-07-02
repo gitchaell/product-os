@@ -1,27 +1,42 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { eq } from 'drizzle-orm';
+import { marked } from 'marked';
+import { db } from '../../db';
+import { docEntries, products } from '../../db/schema';
 import Layout from '../../layouts/Layout.astro';
 
-export async function getStaticPaths() {
-	const entries = await getCollection('docs');
-	return entries.map((entry) => ({
-		params: { id: entry.id },
-		props: { entry },
-	}));
+const { id } = Astro.params;
+
+if (!id) {
+	return Astro.redirect('/404');
 }
 
-const { entry } = Astro.props;
-const { Content } = await render(entry);
-const { title, description, category, author, updated_at, featured_image } =
-	entry.data;
+const entries = await db
+	.select({
+		id: docEntries.id,
+		title: docEntries.title,
+		description: docEntries.description,
+		category: docEntries.category,
+		author: docEntries.author,
+		updatedAt: docEntries.updatedAt,
+		content: docEntries.content,
+		productName: products.name,
+		featuredImage: docEntries.featuredImage,
+	})
+	.from(docEntries)
+	.leftJoin(products, eq(docEntries.productId, products.id))
+	.where(eq(docEntries.id, id));
 
-const formattedDate = updated_at
-	? new Date(updated_at).toLocaleDateString('en-US', {
-			year: 'numeric',
-			month: 'long',
-			day: 'numeric',
-		})
-	: null;
+const entry = entries[0];
+
+if (!entry) {
+	return Astro.redirect('/404');
+}
+
+const { title, description, category, author, productName, featuredImage } =
+	entry;
+
+const htmlContent = marked.parse(entry.content);
 ---
 
 <Layout title={`${title} - Documentation | Product OS Hub`}>
@@ -31,31 +46,30 @@ const formattedDate = updated_at
 		</a>
 
 		<article class="prose dark:prose-invert prose-slate max-w-none">
-			<header class="mb-8">
+			<header class="mb-8 border-b border-slate-200 dark:border-slate-800 pb-8">
 				<div class="flex items-center gap-4 mb-4">
 					<span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border border-primary/20">
 						{category}
 					</span>
-					{formattedDate && (
-						<>
-							<span class="text-slate-500 text-sm">•</span>
-							<span class="text-slate-500 text-sm font-medium">Updated: {formattedDate}</span>
-						</>
-					)}
+          {productName && (
+            <span class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-slate-200 dark:border-slate-700">
+              {productName}
+            </span>
+          )}
 				</div>
 				<h1 class="text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-100 font-display mb-4">{title}</h1>
 				<p class="text-xl text-slate-600 dark:text-slate-400 mb-4">{description}</p>
 				{author && <p class="text-slate-500 dark:text-slate-500 text-sm">By {author}</p>}
 			</header>
 
-			{featured_image && (
+			{featuredImage && (
 				<div class="rounded-xl overflow-hidden mb-8 border border-slate-200 dark:border-slate-800">
-					<img src={featured_image} alt={title} class="w-full h-auto object-cover aspect-video" />
+					<img src={featuredImage} alt={title} class="w-full h-auto object-cover aspect-video" />
 				</div>
 			)}
 
-			<div class="text-slate-700 dark:text-slate-300 leading-relaxed pt-6 border-t border-slate-200 dark:border-slate-800 prose lg:prose-lg dark:prose-invert">
-				<Content />
+			<div class="text-slate-700 dark:text-slate-300 leading-relaxed pt-6 prose lg:prose-lg dark:prose-invert">
+				<div set:html={htmlContent} />
 			</div>
 		</article>
 	</div>

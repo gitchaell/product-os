@@ -1,46 +1,79 @@
 ---
-import { getCollection } from 'astro:content';
-import { Icon } from 'astro-icon/components';
+import { eq } from 'drizzle-orm';
+import { db } from '../db';
+import { docEntries, products } from '../db/schema';
 import Layout from '../layouts/Layout.astro';
 
-// Fetch all docs items
-const docsEntries = await getCollection('docs');
+const url = new URL(Astro.request.url);
+const selectedProductId = url.searchParams.get('product');
+
+const allProducts = await db.select().from(products);
+
+let query = db
+	.select({
+		id: docEntries.id,
+		title: docEntries.title,
+		description: docEntries.description,
+		category: docEntries.category,
+		author: docEntries.author,
+		updatedAt: docEntries.updatedAt,
+		productName: products.name,
+	})
+	.from(docEntries)
+	.leftJoin(products, eq(docEntries.productId, products.id));
+
+if (selectedProductId) {
+	query.where(eq(docEntries.productId, selectedProductId));
+}
+
+const entries = await query;
 ---
 
 <Layout title="Documentation | Product OS Hub">
 	<div class="flex flex-col flex-1 px-6 py-8 max-w-[1400px] mx-auto w-full">
 		<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
 			<div>
-				<h1 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100 font-display" data-editable="source" data-path="/src/pages/docs.astro" data-key="title">Documentation</h1>
-				<p class="text-slate-600 dark:text-slate-500 mt-1 max-w-md font-sans" data-editable="source" data-path="/src/pages/docs.astro" data-key="description">Guides, API references, and system architecture.</p>
+				<h1 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100 font-display">Documentation</h1>
+				<p class="text-slate-600 dark:text-slate-500 mt-1 max-w-md font-sans">Guides, API references, and system architecture.</p>
+			</div>
+
+			<div>
+			  <form method="GET" class="flex gap-2">
+			    <select name="product" class="bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-2 text-slate-900 dark:text-slate-200">
+			      <option value="">All Products</option>
+			      {allProducts.map((p: any) => (
+			        <option value={p.id} selected={p.id === selectedProductId}>{p.name}</option>
+			      ))}
+			    </select>
+			    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Filter</button>
+			  </form>
 			</div>
 		</div>
 
 		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-			{docsEntries.length > 0 ? docsEntries.map(entry => (
+			{entries.map((entry: any) => (
 				<a href={`/docs/${entry.id}`} class="block p-6 rounded-xl bg-white/90 dark:bg-[#102222]/80 backdrop-blur-md border border-slate-200 dark:border-white/5 hover:border-primary/50 dark:hover:border-primary/50 transition-all shadow-md dark:shadow-none hover:shadow-xl dark:hover:shadow-2xl hover:-translate-y-1 cursor-pointer text-inherit no-underline">
-					<div class="mb-4">
-						<span class="px-2 py-1 text-xs rounded bg-primary/10 dark:bg-primary/20 text-primary border border-primary/20 dark:border-primary/30">
-							{entry.data.category}
+					<div class="flex gap-2 mb-4">
+						<span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-primary/20">
+							{entry.category}
 						</span>
+            {entry.productName && (
+              <span class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-slate-200 dark:border-slate-700">
+                {entry.productName}
+              </span>
+            )}
 					</div>
-					<h2 class="text-xl font-bold text-slate-800 dark:text-slate-200 mb-2">{entry.data.title}</h2>
-					<p class="text-slate-600 dark:text-slate-400 text-sm mb-4">
-						{entry.data.description}
-					</p>
-					{entry.data.author && (
-						<div class="text-slate-500 text-xs mt-2">
-							By {entry.data.author}
+					<h2 class="text-xl font-bold text-slate-800 dark:text-slate-200 mb-2">{entry.title}</h2>
+					<div class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6">
+						{entry.description}
+					</div>
+					{entry.author && (
+						<div class="text-slate-500 dark:text-slate-500 text-xs mt-auto pt-4 border-t border-slate-100 dark:border-white/5">
+							By {entry.author}
 						</div>
 					)}
 				</a>
-			)) : (
-				<div class="col-span-full p-12 text-center rounded-xl border border-slate-300 dark:border-slate-800 border-dashed bg-white/30 dark:bg-transparent">
-					<Icon name="tabler:file-description" class="w-12 h-12 text-slate-400 dark:text-slate-600 mx-auto mb-4" />
-					<h3 class="text-lg font-medium text-slate-700 dark:text-slate-300">No documentation found</h3>
-					<p class="text-slate-500 dark:text-slate-500 mt-2">Documentation articles will appear here once they are added.</p>
-				</div>
-			)}
+			))}
 		</div>
 	</div>
 </Layout>

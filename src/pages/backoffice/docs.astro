@@ -1,0 +1,106 @@
+---
+import { v4 as uuidv4 } from 'uuid';
+import { db } from '../../db';
+import { docEntries, products } from '../../db/schema';
+import Layout from '../../layouts/Layout.astro';
+
+if (Astro.request.method === 'POST') {
+	const formData = await Astro.request.formData();
+	const productId = formData.get('productId')?.toString();
+	const title = formData.get('title')?.toString();
+	const description = formData.get('description')?.toString();
+	const category = formData.get('category')?.toString();
+	const author = formData.get('author')?.toString();
+	const content = formData.get('content')?.toString();
+
+	if (productId && title && description && category && content) {
+		await db.insert(docEntries).values({
+			id: uuidv4(),
+			productId,
+			title,
+			description,
+			category,
+			author: author || null,
+			updatedAt: new Date(),
+			content,
+		});
+	}
+}
+
+const allProducts = await db.select().from(products);
+const allEntries = await db.select().from(docEntries);
+---
+
+<Layout title="Docs | Backoffice">
+  <div class="flex flex-col flex-1 px-6 py-8 max-w-[1400px] mx-auto w-full">
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100 font-display">Manage Docs</h1>
+      <a href="/backoffice" class="text-blue-600 dark:text-blue-400 hover:underline">Back to Dashboard</a>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div class="lg:col-span-1">
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800">
+          <h2 class="text-xl font-semibold mb-4 text-slate-900 dark:text-white">Add Doc Entry</h2>
+          <form method="POST" class="space-y-4">
+            <div>
+              <label for="productId" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Product</label>
+              <select id="productId" name="productId" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-2 text-slate-900 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                {allProducts.map(p => <option value={p.id}>{p.name}</option>)}
+              </select>
+            </div>
+            <div>
+              <label for="title" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Title</label>
+              <input type="text" id="title" name="title" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-2 text-slate-900 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+            <div>
+              <label for="description" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Description</label>
+              <input type="text" id="description" name="description" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-2 text-slate-900 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+            <div>
+              <label for="category" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Category</label>
+              <input type="text" id="category" name="category" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-2 text-slate-900 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+            <div>
+              <label for="author" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Author</label>
+              <input type="text" id="author" name="author" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-2 text-slate-900 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+            <div>
+              <label for="content" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Content (Markdown)</label>
+              <textarea id="content" name="content" rows="4" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-2 text-slate-900 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+            </div>
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors">Add Entry</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="lg:col-span-2">
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
+                <th class="px-6 py-4 text-sm font-semibold text-slate-900 dark:text-white">Title</th>
+                <th class="px-6 py-4 text-sm font-semibold text-slate-900 dark:text-white">Category</th>
+                <th class="px-6 py-4 text-sm font-semibold text-slate-900 dark:text-white">Updated</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+              {allEntries.map((entry) => (
+                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                  <td class="px-6 py-4 text-sm font-medium text-slate-900 dark:text-white">{entry.title}</td>
+                  <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">{entry.category}</td>
+                  <td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-500">{entry.updatedAt ? new Date(entry.updatedAt).toLocaleDateString() : ''}</td>
+                </tr>
+              ))}
+              {allEntries.length === 0 && (
+                <tr>
+                  <td colspan="3" class="px-6 py-8 text-center text-slate-500 dark:text-slate-400">No entries found.</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

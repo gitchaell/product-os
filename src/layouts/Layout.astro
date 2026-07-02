@@ -1,10 +1,11 @@
 ---
-import { getCollection } from 'astro:content';
 import { Icon } from 'astro-icon/components';
+import { desc } from 'drizzle-orm';
 import Head from '@/components/common/Head.astro';
 import ThemeToggle from '@/components/ThemeToggle.astro';
-
 import siteData from '@/data/site.json';
+import { db } from '../db';
+import { changelogEntries } from '../db/schema';
 
 interface Props {
 	title: string;
@@ -14,12 +15,11 @@ interface Props {
 const { title, description = 'The Product OS Hub' } = Astro.props;
 
 // Fetch latest version from changelog
-const changelogEntries = await getCollection('changelog');
-changelogEntries.sort(
-	(a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf(),
-);
-const latestVersion =
-	changelogEntries.length > 0 ? changelogEntries[0].data.version : 'v1.0.0';
+const entries = await db
+	.select()
+	.from(changelogEntries)
+	.orderBy(desc(changelogEntries.date));
+const latestVersion = entries.length > 0 ? entries[0].version : 'v1.0.0';
 ---
 
 <!doctype html>
@@ -31,9 +31,9 @@ const latestVersion =
       <header class="sticky top-0 z-50 flex items-center justify-between border-b border-slate-200 dark:border-border-dark bg-white/80 dark:bg-background-dark/80 backdrop-blur-md px-6 md:px-20 py-4">
         <div class="flex items-center gap-8">
           <div class="flex items-center gap-3 text-primary" >
-            <img src={siteData.logo} alt="Logo" class="w-8 h-8" data-editable="image" data-prop-src="@data[site].logo" />
+            <img src={siteData.logo} alt="Logo" class="w-8 h-8" />
             <div class="flex items-center gap-2">
-              <h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight font-display" data-editable="text" data-prop="@data[site].site_title">{siteData.site_title}</h2>
+              <h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight font-display">{siteData.site_title}</h2>
               <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-widest bg-primary/10 text-primary border border-primary/20 font-sans hidden sm:inline-block">{latestVersion}</span>
             </div>
           </div>
@@ -42,6 +42,7 @@ const latestVersion =
             <a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="/roadmap">Roadmap</a>
             <a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="/docs">Docs</a>
             <a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="/feedback">Feedback</a>
+            <a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="/backoffice">Backoffice</a>
           </nav>
         </div>
 
@@ -60,6 +61,7 @@ const latestVersion =
         <a class="text-slate-700 dark:text-slate-300 hover:text-primary text-lg font-medium transition-colors" href="/roadmap">Roadmap</a>
         <a class="text-slate-700 dark:text-slate-300 hover:text-primary text-lg font-medium transition-colors" href="/docs">Docs</a>
         <a class="text-slate-700 dark:text-slate-300 hover:text-primary text-lg font-medium transition-colors" href="/feedback">Feedback</a>
+        <a class="text-slate-700 dark:text-slate-300 hover:text-primary text-lg font-medium transition-colors" href="/backoffice">Backoffice</a>
       </div>
 
       <script>
@@ -93,10 +95,10 @@ const latestVersion =
       <!-- Footer common across screens -->
       <footer class="mt-32 pt-12 border-t border-slate-200 dark:border-border-dark flex flex-col md:flex-row justify-between items-center gap-8 text-slate-500 text-sm px-6 pb-6">
         <div class="flex items-center gap-4">
-          <span>© <span id="current-year">{new Date().getFullYear()}</span> <span data-editable="text" data-prop="@data[site].site_title">{siteData.site_title}</span></span>
+          <span>© <span id="current-year">{new Date().getFullYear()}</span> <span>{siteData.site_title}</span></span>
           <span>•</span>
           <div class="flex gap-4" >
-            <div class="flex gap-4" data-editable="array" data-prop="@data[site].social_links">
+            <div class="flex gap-4">
               {siteData.social_links.map((link: { name: string; url: string }) => (
                 <a class="hover:text-primary" href={link.url}>{link.name}</a>
               ))}

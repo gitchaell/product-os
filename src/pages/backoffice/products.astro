@@ -1,0 +1,79 @@
+---
+import { v4 as uuidv4 } from 'uuid';
+import { db } from '../../db';
+import { products } from '../../db/schema';
+import Layout from '../../layouts/Layout.astro';
+
+if (Astro.request.method === 'POST') {
+	const formData = await Astro.request.formData();
+	const name = formData.get('name')?.toString();
+	const description = formData.get('description')?.toString();
+
+	if (name && description) {
+		await db.insert(products).values({
+			id: uuidv4(),
+			name,
+			description,
+			createdAt: new Date(),
+		});
+	}
+}
+
+const allProducts = await db.select().from(products);
+---
+
+<Layout title="Products | Backoffice">
+  <div class="flex flex-col flex-1 px-6 py-8 max-w-[1400px] mx-auto w-full">
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100 font-display">Manage Products</h1>
+      <a href="/backoffice" class="text-blue-600 dark:text-blue-400 hover:underline">Back to Dashboard</a>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div class="lg:col-span-1">
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800">
+          <h2 class="text-xl font-semibold mb-4 text-slate-900 dark:text-white">Add New Product</h2>
+          <form method="POST" class="space-y-4">
+            <div>
+              <label for="name" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Name</label>
+              <input type="text" id="name" name="name" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-2 text-slate-900 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+            <div>
+              <label for="description" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Description</label>
+              <textarea id="description" name="description" rows="3" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-2 text-slate-900 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+            </div>
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors">Add Product</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="lg:col-span-2">
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
+                <th class="px-6 py-4 text-sm font-semibold text-slate-900 dark:text-white">Name</th>
+                <th class="px-6 py-4 text-sm font-semibold text-slate-900 dark:text-white">Description</th>
+                <th class="px-6 py-4 text-sm font-semibold text-slate-900 dark:text-white">Created At</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+              {allProducts.map((product) => (
+                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                  <td class="px-6 py-4 text-sm font-medium text-slate-900 dark:text-white">{product.name}</td>
+                  <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">{product.description}</td>
+                  <td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-500">{product.createdAt ? new Date(product.createdAt).toLocaleDateString() : ''}</td>
+                </tr>
+              ))}
+              {allProducts.length === 0 && (
+                <tr>
+                  <td colspan="3" class="px-6 py-8 text-center text-slate-500 dark:text-slate-400">No products found. Create one above.</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

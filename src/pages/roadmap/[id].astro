@@ -1,25 +1,38 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { eq } from 'drizzle-orm';
+import { marked } from 'marked';
+import { db } from '../../db';
+import { products, roadmapEntries } from '../../db/schema';
 import Layout from '../../layouts/Layout.astro';
 
-export async function getStaticPaths() {
-	const entries = await getCollection('roadmap');
-	return entries.map((entry) => ({
-		params: { id: entry.id },
-		props: { entry },
-	}));
+const { id } = Astro.params;
+
+if (!id) {
+	return Astro.redirect('/404');
 }
 
-const { entry } = Astro.props;
-const { Content } = await render(entry);
-const {
-	title,
-	status,
-	category,
-	assignees = [],
-	progress,
-	priority,
-} = entry.data;
+const entries = await db
+	.select({
+		id: roadmapEntries.id,
+		title: roadmapEntries.title,
+		status: roadmapEntries.status,
+		category: roadmapEntries.category,
+		progress: roadmapEntries.progress,
+		priority: roadmapEntries.priority,
+		content: roadmapEntries.content,
+		productName: products.name,
+	})
+	.from(roadmapEntries)
+	.leftJoin(products, eq(roadmapEntries.productId, products.id))
+	.where(eq(roadmapEntries.id, id));
+
+const entry = entries[0];
+
+if (!entry) {
+	return Astro.redirect('/404');
+}
+
+const { title, status, category, progress, priority, productName } = entry;
 
 const categoryColors: Record<string, string> = {
 	'UI/UX':
@@ -46,6 +59,8 @@ const statusColors: Record<string, string> = {
 	Launched: 'bg-green-500 text-white',
 };
 const statusClasses = statusColors[status] || 'bg-slate-500 text-white';
+
+const htmlContent = entry.content ? marked.parse(entry.content) : '';
 ---
 
 <Layout title={`${title} - Roadmap | Product OS Hub`}>
@@ -63,26 +78,18 @@ const statusClasses = statusColors[status] || 'bg-slate-500 text-white';
 					<span class={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border-none ${statusClasses}`}>
 						{status}
 					</span>
+          {productName && (
+            <span class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border border-slate-200 dark:border-slate-700">
+              {productName}
+            </span>
+          )}
 					{priority && (
 						<span class="text-slate-500 text-sm font-medium">Priority: {priority}</span>
 					)}
 				</div>
 				<h1 class="text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-100 font-display mb-4">{title}</h1>
 
-				{assignees.length > 0 && (
-					<div class="flex items-center gap-3 mt-4">
-						<span class="text-slate-500 text-sm">Assignees:</span>
-						<div class="flex -space-x-2">
-							{assignees.map((user) => (
-								<div class="w-8 h-8 rounded-full bg-primary/20 dark:bg-primary/40 border-2 border-white dark:border-gray-950 flex items-center justify-center text-sm font-bold text-primary dark:text-slate-100" title={user.name}>
-									{user.initials}
-								</div>
-							))}
-						</div>
-					</div>
-				)}
-
-				{progress !== undefined && progress > 0 && (
+				{progress !== undefined && progress !== null && progress > 0 && (
 					<div class="mt-6 max-w-md">
 						<div class="flex items-center justify-between mb-2">
 							<span class="text-xs text-slate-500 dark:text-slate-400 font-mono">PROGRESS</span>
@@ -95,9 +102,11 @@ const statusClasses = statusColors[status] || 'bg-slate-500 text-white';
 				)}
 			</header>
 
-			<div class="text-slate-700 dark:text-slate-300 leading-relaxed pt-6 border-t border-slate-200 dark:border-slate-800">
-				<Content />
-			</div>
+      {htmlContent && (
+			  <div class="text-slate-700 dark:text-slate-300 leading-relaxed pt-6 border-t border-slate-200 dark:border-slate-800">
+				  <div set:html={htmlContent} />
+			  </div>
+      )}
 		</article>
 	</div>
 </Layout>

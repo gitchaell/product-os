@@ -1,24 +1,46 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { eq } from 'drizzle-orm';
+import { marked } from 'marked';
+import { db } from '../../db';
+import { changelogEntries, products } from '../../db/schema';
 import Layout from '../../layouts/Layout.astro';
 
-export async function getStaticPaths() {
-	const entries = await getCollection('changelog');
-	return entries.map((entry) => ({
-		params: { id: entry.id },
-		props: { entry },
-	}));
+const { id } = Astro.params;
+
+if (!id) {
+	return Astro.redirect('/404');
 }
 
-const { entry } = Astro.props;
-const { Content } = await render(entry);
-const { title, version, date, type, banner_image, author } = entry.data;
+const entries = await db
+	.select({
+		id: changelogEntries.id,
+		title: changelogEntries.title,
+		description: changelogEntries.description,
+		version: changelogEntries.version,
+		date: changelogEntries.date,
+		type: changelogEntries.type,
+		content: changelogEntries.content,
+		productName: products.name,
+	})
+	.from(changelogEntries)
+	.leftJoin(products, eq(changelogEntries.productId, products.id))
+	.where(eq(changelogEntries.id, id));
+
+const entry = entries[0];
+
+if (!entry) {
+	return Astro.redirect('/404');
+}
+
+const { title, version, date, type, productName, description } = entry;
 
 const formattedDate = new Date(date).toLocaleDateString('en-US', {
 	year: 'numeric',
 	month: 'long',
 	day: 'numeric',
 });
+
+const htmlContent = marked.parse(entry.content);
 ---
 
 <Layout title={`${title} - Changelog | Product OS Hub`}>
@@ -30,25 +52,24 @@ const formattedDate = new Date(date).toLocaleDateString('en-US', {
 		<article class="prose dark:prose-invert prose-slate max-w-none">
 			<header class="mb-8">
 				<div class="flex items-center gap-4 mb-4">
-					<span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border border-primary/20">
+					<span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-primary/20">
 						{type}
 					</span>
 					<span class="text-slate-500 font-mono text-sm font-bold tracking-widest uppercase">{version}</span>
 					<span class="text-slate-500 text-sm hidden sm:inline">&bull;</span>
 					<span class="text-slate-500 text-sm font-medium">{formattedDate}</span>
+          {productName && (
+            <span class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-slate-200 dark:border-slate-700">
+              {productName}
+            </span>
+          )}
 				</div>
-				<h1 class="text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-100 font-display mb-2">{title}</h1>
-				{author && <p class="text-slate-500 dark:text-slate-400 mt-2">By {author}</p>}
+				<h1 class="text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-100 font-display mb-4">{title}</h1>
+				{description && <p class="text-xl text-slate-600 dark:text-slate-400 mb-4">{description}</p>}
 			</header>
 
-			{banner_image && (
-				<div class="rounded-xl overflow-hidden mb-8 border border-slate-200 dark:border-slate-800">
-					<img src={banner_image} alt={title} class="w-full h-auto object-cover aspect-video" />
-				</div>
-			)}
-
-			<div class="text-slate-700 dark:text-slate-300 leading-relaxed prose lg:prose-lg dark:prose-invert">
-				<Content />
+			<div class="text-slate-700 dark:text-slate-300 leading-relaxed pt-6 border-t border-slate-200 dark:border-slate-800 prose lg:prose-lg dark:prose-invert">
+				<div set:html={htmlContent} />
 			</div>
 		</article>
 	</div>

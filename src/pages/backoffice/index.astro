@@ -1,0 +1,31 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Backoffice | Product OS">
+  <div class="flex flex-col flex-1 px-6 py-8 max-w-[1400px] mx-auto w-full">
+    <h1 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100 font-display mb-8">Backoffice Dashboard</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <a href="/backoffice/products" class="p-6 bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-500 transition-colors">
+        <h2 class="text-xl font-semibold text-slate-900 dark:text-white mb-2">Products</h2>
+        <p class="text-slate-600 dark:text-slate-400">Manage products, their names, and descriptions.</p>
+      </a>
+
+      <a href="/backoffice/changelog" class="p-6 bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-500 transition-colors">
+        <h2 class="text-xl font-semibold text-slate-900 dark:text-white mb-2">Changelog</h2>
+        <p class="text-slate-600 dark:text-slate-400">Manage versions, updates, and bug fixes.</p>
+      </a>
+
+      <a href="/backoffice/roadmap" class="p-6 bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-500 transition-colors">
+        <h2 class="text-xl font-semibold text-slate-900 dark:text-white mb-2">Roadmap</h2>
+        <p class="text-slate-600 dark:text-slate-400">Plan and manage upcoming features and updates.</p>
+      </a>
+
+      <a href="/backoffice/docs" class="p-6 bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-500 transition-colors">
+        <h2 class="text-xl font-semibold text-slate-900 dark:text-white mb-2">Docs</h2>
+        <p class="text-slate-600 dark:text-slate-400">Manage documentation articles and guides.</p>
+      </a>
+    </div>
+  </div>
+</Layout>

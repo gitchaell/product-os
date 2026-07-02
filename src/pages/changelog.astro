@@ -1,38 +1,79 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { desc, eq } from 'drizzle-orm';
+import { marked } from 'marked';
 import ChangelogCard from '../components/ChangelogCard.astro';
+import { db } from '../db';
+import { changelogEntries, products } from '../db/schema';
 import Layout from '../layouts/Layout.astro';
 
-// Fetch all changelog items
-const changelogEntries = await getCollection('changelog');
+const url = new URL(Astro.request.url);
+const selectedProductId = url.searchParams.get('product');
 
-// Sort by date (newest first)
-changelogEntries.sort(
-	(a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf(),
-);
+const allProducts = await db.select().from(products);
 
-// Render the content for each entry so it can be passed as a slot
-const renderedEntries = await Promise.all(
-	changelogEntries.map(async (entry) => {
-		const { Content } = await render(entry);
-		return { entry, Content };
-	}),
-);
+let query = db
+	.select({
+		id: changelogEntries.id,
+		title: changelogEntries.title,
+		description: changelogEntries.description,
+		version: changelogEntries.version,
+		date: changelogEntries.date,
+		type: changelogEntries.type,
+		content: changelogEntries.content,
+		productName: products.name,
+	})
+	.from(changelogEntries)
+	.leftJoin(products, eq(changelogEntries.productId, products.id));
+
+if (selectedProductId) {
+	query.where(eq(changelogEntries.productId, selectedProductId));
+}
+
+const entries = await query.orderBy(desc(changelogEntries.date));
+
+const renderedEntries = entries.map((entry: any) => {
+	return {
+		entry: {
+			id: entry.id,
+			data: {
+				title: entry.title,
+				description: entry.description || undefined,
+				version: entry.version,
+				date: entry.date,
+				type: entry.type,
+				productName: entry.productName || undefined,
+			},
+		},
+		htmlContent: marked.parse(entry.content),
+	};
+});
 ---
 
 <Layout title="Changelog | Product OS Hub">
 	<div class="flex flex-col flex-1 px-6 py-8 max-w-[1400px] mx-auto w-full">
 		<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
 			<div>
-				<h1 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100 font-display" data-editable="source" data-path="/src/pages/changelog.astro" data-key="title">Changelog</h1>
-				<p class="text-slate-600 dark:text-slate-500 mt-1 max-w-md font-sans" data-editable="source" data-path="/src/pages/changelog.astro" data-key="description">Latest updates and improvements to the platform.</p>
+				<h1 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100 font-display">Changelog</h1>
+				<p class="text-slate-600 dark:text-slate-500 mt-1 max-w-md font-sans">Latest updates and improvements to the platform.</p>
+			</div>
+
+			<div>
+			  <form method="GET" class="flex gap-2">
+			    <select name="product" class="bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-2 text-slate-900 dark:text-slate-200">
+			      <option value="">All Products</option>
+			      {allProducts.map((p: any) => (
+			        <option value={p.id} selected={p.id === selectedProductId}>{p.name}</option>
+			      ))}
+			    </select>
+			    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Filter</button>
+			  </form>
 			</div>
 		</div>
 
 		<div class="flex flex-col gap-6 relative before:absolute before:inset-0 before:left-0 before:-translate-x-1/2 before:w-0.5 before:h-full before:bg-gradient-to-b before:from-transparent before:via-slate-300 dark:before:via-slate-800 before:to-transparent">
-			{renderedEntries.map(({ entry, Content }) => (
+			{renderedEntries.map(({ entry, htmlContent }: any) => (
 				<ChangelogCard entry={entry}>
-					<Content />
+					<div set:html={htmlContent} />
 				</ChangelogCard>
 			))}
 		</div>

@@ -31,7 +31,6 @@
 		"@astrojs/sitemap": "^3.7.1",
 		"@astrojs/ts-plugin": "^1.10.7",
 		"@astrojs/vercel": "^11.0.1",
-		"@cloudcannon/editable-regions": "^0.0.12",
 		"@iconify-json/tabler": "^1.2.31",
 		"@libsql/client": "^0.17.4",
 		"@tailwindcss/typography": "^0.5.19",
@@ -51,7 +50,6 @@
 	"devDependencies": {
 		"@astrojs/check": "^0.9.7",
 		"@biomejs/biome": "^2.4.4",
-		"@cloudcannon/configuration-types": "^0.0.53",
 		"@commitlint/cli": "^19.7.1",
 		"@commitlint/config-conventional": "^19.7.1",
 		"@types/node": "^22.13.1",

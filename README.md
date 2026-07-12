@@ -30,7 +30,6 @@ El proyecto adopta un patrón arquitectónico basado en **Generación de Sitios 
 
 *   **Ruteo en el Cliente (Client-Side Routing):** Para mitigar la navegación tradicional de múltiples cargas completas (Multi-Page Application), se implementaron las **Astro View Transitions**. Esto proporciona una navegación que simula una SPA, preservando el estado de la UI (como el modo oscuro `dark:` mediante el `ThemeToggle`) sin sobrecargar el hilo principal.
 *   **Separación de Metadatos Globales:** Los datos genéricos del sitio (nombre, logo, enlaces sociales) están desacoplados de los componentes y almacenados estáticamente en `src/data/site.json`, implementando un patrón de configuración centralizada mediante alias de rutas (`@/data`).
-*   **Gestión de Formularios Serverless:** La recolección de retroalimentación de usuarios (`FeedbackForm.astro`) se gestiona delegando la captura de envíos a la infraestructura de CloudCannon (vía atributos ocultos como `inbox_key`), manteniendo la pureza estática del frontend sin requerir un backend propio.
 
 ```mermaid
 graph TD
